@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageIcon>NSS-128x128.png</PackageIcon>
+        <PackageIconUrl />
+        <RepositoryUrl>https://github.com/nefarius/Nefarius.Utilities.AspNetCore</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/nefarius/Nefarius.Utilities.AspNetCore</PackageProjectUrl>
+        <Authors>Benjamin Höglinger-Stelzer</Authors>
+        <OutputPath>$(SolutionDir)bin\</OutputPath>
+        <Copyright>Copyright © Benjamin Höglinger-Stelzer 2022-2023</Copyright>
+        <LangVersion>latest</LangVersion>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <Description>My opinionated collection of utilities for ASP.NET Core applications.</Description>
+        <PackageReadmeFile>README-NuGet.md</PackageReadmeFile>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <Version>1.8.4</Version>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\assets\NSS-128x128.png">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </None>
+        <None Include="..\README-NuGet.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="GitVersion.MsBuild" Version="5.12.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="LiteDB" Version="5.0.17" />
+        <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+    </ItemGroup>
+
+</Project>
