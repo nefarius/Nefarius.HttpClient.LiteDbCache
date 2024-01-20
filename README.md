@@ -7,3 +7,9 @@
 Adds disk-based response caching to HttpClient named instances.
 
 Work in progress...
+
+## Sources & 3rd party credits
+
+This library benefits from these awesome projects ❤ (appearance in no special order):
+
+- [LiteDB](https://github.com/mbdavid/LiteDB)
