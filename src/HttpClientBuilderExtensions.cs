@@ -2,6 +2,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
+using LiteDB;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
@@ -34,7 +36,7 @@ public static class HttpClientBuilderExtensions
         builder.Services.Configure<DatabaseInstanceOptions>(name, options =>
         {
             options.ClientName = name;
-            options.ConnectionString = dbOptions.ConnectionString;
+            options.Database = new LiteDatabase(dbOptions.ConnectionString);
             options.CollectionName = dbOptions.CollectionName;
             options.EntryOptions = dbOptions.EntryOptions;
         });

@@ -31,10 +31,8 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
         // get instance options
         DatabaseInstanceOptions options = _options.Get(_instanceName);
 
-        using LiteDatabase db = new(options.ConnectionString);
-
         ILiteCollection<CachedHttpResponseMessage> col =
-            db.GetCollection<CachedHttpResponseMessage>(options.CollectionName);
+            options.Database.GetCollection<CachedHttpResponseMessage>(options.CollectionName);
 
         CachedHttpResponseMessage cacheEntry = col.FindOne(message => message.Uri == request.RequestUri);
 
