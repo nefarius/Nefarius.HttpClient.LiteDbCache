@@ -21,9 +21,9 @@ public static class HttpClientBuilderExtensions
     ///     Configures a named <see cref="LiteDB"/> cache instance for a given <see cref="IHttpClientBuilder"/>. 
     /// </summary>
     public static IHttpClientBuilder AddLiteDbCache(this IHttpClientBuilder builder,
-        Action<CacheDatabaseOptions> configuration)
+        Action<LiteDbCacheDatabaseOptions> configuration)
     {
-        CacheDatabaseOptions dbOptions = new();
+        LiteDbCacheDatabaseOptions dbOptions = new();
 
         configuration.Invoke(dbOptions);
 

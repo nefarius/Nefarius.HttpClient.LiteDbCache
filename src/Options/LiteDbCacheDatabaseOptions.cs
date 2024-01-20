@@ -3,9 +3,9 @@
 /// <summary>
 ///     Configuration properties for a <see cref="LiteDB"/> instance to use for request caching.
 /// </summary>
-public sealed class CacheDatabaseOptions
+public sealed class LiteDbCacheDatabaseOptions
 {
-    internal CacheDatabaseOptions()
+    internal LiteDbCacheDatabaseOptions()
     {
     }
 
