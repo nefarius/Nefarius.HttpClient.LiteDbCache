@@ -1,4 +1,6 @@
-﻿namespace Nefarius.HttpClient.LiteDbCache.Internal;
+﻿using Nefarius.HttpClient.LiteDbCache.Options;
+
+namespace Nefarius.HttpClient.LiteDbCache.Internal;
 
 internal sealed class DatabaseInstanceOptions
 {
@@ -7,4 +9,6 @@ internal sealed class DatabaseInstanceOptions
     public string ConnectionString { get; internal set; }
 
     public string CollectionName { get; internal set; }
+
+    public LiteDbCacheEntryOptions EntryOptions { get; internal set; }
 }

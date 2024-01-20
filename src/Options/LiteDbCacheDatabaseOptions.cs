@@ -18,4 +18,9 @@ public sealed class LiteDbCacheDatabaseOptions
     ///     The <see cref="LiteDB"/> collection name.
     /// </summary>
     public string CollectionName { get; set; }
+
+    /// <summary>
+    ///     The parameters that apply to each cache entries' expiration strategy etc.
+    /// </summary>
+    public LiteDbCacheEntryOptions EntryOptions { get; set; } = new();
 }

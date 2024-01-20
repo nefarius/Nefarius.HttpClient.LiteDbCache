@@ -36,6 +36,7 @@ public static class HttpClientBuilderExtensions
             options.ClientName = name;
             options.ConnectionString = dbOptions.ConnectionString;
             options.CollectionName = dbOptions.CollectionName;
+            options.EntryOptions = dbOptions.EntryOptions;
         });
 
         // registers message handler
