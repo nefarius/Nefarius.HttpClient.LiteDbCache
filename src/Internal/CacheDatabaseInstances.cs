@@ -21,10 +21,10 @@ internal sealed class CacheDatabaseInstances : Dictionary<string, LiteDatabase>
     }
 
     /// <summary>
-    ///     Gets (or creates) a <see cref="LiteDatabase"/> instance for a given name.
+    ///     Gets (or creates) a <see cref="LiteDatabase" /> instance for a given name.
     /// </summary>
     /// <param name="name">The client/instance name.</param>
-    /// <returns>The <see cref="LiteDatabase"/> object.</returns>
+    /// <returns>The <see cref="LiteDatabase" /> object.</returns>
     public LiteDatabase GetDatabase(string name)
     {
         if (TryGetValue(name, out LiteDatabase db))

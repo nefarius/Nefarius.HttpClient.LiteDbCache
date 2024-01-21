@@ -1,8 +1,7 @@
 ﻿#nullable enable
+
 using System;
 using System.Diagnostics.CodeAnalysis;
-
-using LiteDB;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -20,7 +19,7 @@ namespace Nefarius.HttpClient.LiteDbCache;
 public static class HttpClientBuilderExtensions
 {
     /// <summary>
-    ///     Configures a named <see cref="LiteDB"/> cache instance for a given <see cref="IHttpClientBuilder"/>. 
+    ///     Configures a named <see cref="LiteDB" /> cache instance for a given <see cref="IHttpClientBuilder" />.
     /// </summary>
     public static IHttpClientBuilder AddLiteDbCache(this IHttpClientBuilder builder,
         Action<LiteDbCacheDatabaseOptions> configuration)
@@ -33,7 +32,7 @@ public static class HttpClientBuilderExtensions
         {
             throw new ArgumentException($"{nameof(LiteDbCacheDatabaseOptions.ConnectionString)} must not be empty");
         }
-        
+
         if (string.IsNullOrEmpty(dbOptions.CollectionName))
         {
             throw new ArgumentException($"{nameof(LiteDbCacheDatabaseOptions.CollectionName)} must not be empty");
@@ -50,7 +49,7 @@ public static class HttpClientBuilderExtensions
             options.CollectionName = dbOptions.CollectionName;
             options.EntryOptions = dbOptions.EntryOptions;
         });
-        
+
         // stores name to database object association
         builder.Services.TryAddSingleton<CacheDatabaseInstances>();
 

@@ -3,7 +3,7 @@
 namespace Nefarius.HttpClient.LiteDbCache.Options;
 
 /// <summary>
-/// Provides the cache options for an entry in a LiteDb cache instance.
+///     Provides the cache options for an entry in a LiteDb cache instance.
 /// </summary>
 public sealed class LiteDbCacheEntryOptions
 {
@@ -11,12 +11,12 @@ public sealed class LiteDbCacheEntryOptions
     private TimeSpan? _slidingExpiration;
 
     /// <summary>
-    /// Gets or sets an absolute expiration date for the cache entry.
+    ///     Gets or sets an absolute expiration date for the cache entry.
     /// </summary>
     public DateTimeOffset? AbsoluteExpiration { get; set; }
 
     /// <summary>
-    /// Gets or sets an absolute expiration time, relative to now.
+    ///     Gets or sets an absolute expiration time, relative to now.
     /// </summary>
     public TimeSpan? AbsoluteExpirationRelativeToNow
     {
@@ -36,8 +36,8 @@ public sealed class LiteDbCacheEntryOptions
     }
 
     /// <summary>
-    /// Gets or sets how long a cache entry can be inactive (e.g. not accessed) before it will be removed.
-    /// This will not extend the entry lifetime beyond the absolute expiration (if set).
+    ///     Gets or sets how long a cache entry can be inactive (e.g. not accessed) before it will be removed.
+    ///     This will not extend the entry lifetime beyond the absolute expiration (if set).
     /// </summary>
     public TimeSpan? SlidingExpiration
     {
@@ -57,7 +57,7 @@ public sealed class LiteDbCacheEntryOptions
     }
 
     /// <summary>
-    /// Gets or sets whether a non-success HTTP response should also be added to the cache.
+    ///     Gets or sets whether a non-success HTTP response should also be added to the cache.
     /// </summary>
     public bool CacheErrors { get; set; } = false;
 }

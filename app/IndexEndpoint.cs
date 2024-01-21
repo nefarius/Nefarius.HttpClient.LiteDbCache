@@ -1,7 +1,5 @@
 ﻿using FastEndpoints;
 
-using Nefarius.HttpClient.LiteDbCache;
-
 namespace TestWebApp;
 
 public sealed class IndexEndpoint : EndpointWithoutRequest

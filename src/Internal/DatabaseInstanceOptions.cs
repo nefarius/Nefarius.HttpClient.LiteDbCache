@@ -1,6 +1,4 @@
-﻿using LiteDB;
-
-using Nefarius.HttpClient.LiteDbCache.Options;
+﻿using Nefarius.HttpClient.LiteDbCache.Options;
 
 namespace Nefarius.HttpClient.LiteDbCache.Internal;
 

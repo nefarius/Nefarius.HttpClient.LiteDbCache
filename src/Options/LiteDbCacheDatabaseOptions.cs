@@ -1,7 +1,7 @@
 ﻿namespace Nefarius.HttpClient.LiteDbCache.Options;
 
 /// <summary>
-///     Configuration properties for a <see cref="LiteDB"/> instance to use for request caching.
+///     Configuration properties for a <see cref="LiteDB" /> instance to use for request caching.
 /// </summary>
 public sealed class LiteDbCacheDatabaseOptions
 {
@@ -10,12 +10,12 @@ public sealed class LiteDbCacheDatabaseOptions
     }
 
     /// <summary>
-    ///     The <see cref="LiteDB"/> connection string.
+    ///     The <see cref="LiteDB" /> connection string.
     /// </summary>
     public string ConnectionString { get; set; }
 
     /// <summary>
-    ///     The <see cref="LiteDB"/> collection name.
+    ///     The <see cref="LiteDB" /> collection name.
     /// </summary>
     public string CollectionName { get; set; }
 

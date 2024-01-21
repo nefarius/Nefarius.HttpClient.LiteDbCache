@@ -9,7 +9,7 @@ using LiteDB;
 namespace Nefarius.HttpClient.LiteDbCache.Internal;
 
 /// <summary>
-///     Describes a serializable <see cref="HttpResponseMessage"/> cache entry.
+///     Describes a serializable <see cref="HttpResponseMessage" /> cache entry.
 /// </summary>
 internal sealed class CachedHttpResponseMessage
 {
@@ -29,7 +29,7 @@ internal sealed class CachedHttpResponseMessage
     ///     Response HTTP headers.
     /// </summary>
     public Dictionary<string, List<string>> Headers { get; set; } = new();
-    
+
     /// <summary>
     ///     Response status code.
     /// </summary>

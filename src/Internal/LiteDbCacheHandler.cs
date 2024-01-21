@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,12 +16,16 @@ using Nefarius.HttpClient.LiteDbCache.Options;
 
 namespace Nefarius.HttpClient.LiteDbCache.Internal;
 
+/// <summary>
+///     Pulls a cached <see cref="HttpResponseMessage" /> from a <see cref="LiteDatabase" /> cache instance, if available.
+///     Also does housekeeping like scrubbing expired entries etc.
+/// </summary>
 internal sealed class LiteDbCacheHandler : DelegatingHandler
 {
-    private readonly IOptionsSnapshot<DatabaseInstanceOptions> _options;
     private readonly string _instanceName;
-    private readonly ILogger<LiteDbCacheHandler> _logger;
     private readonly CacheDatabaseInstances _instances;
+    private readonly ILogger<LiteDbCacheHandler> _logger;
+    private readonly IOptionsSnapshot<DatabaseInstanceOptions> _options;
 
     public LiteDbCacheHandler(IOptionsSnapshot<DatabaseInstanceOptions> options, string instanceName,
         ILogger<LiteDbCacheHandler> logger, CacheDatabaseInstances instances)
@@ -138,7 +141,7 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
             };
 
         col.Insert(cacheEntry);
-        
+
         _logger.LogDebug("Added new cached entry {Entry}", cacheEntry);
 
         // rewind and replace original stream
