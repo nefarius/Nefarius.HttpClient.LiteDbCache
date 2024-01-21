@@ -35,6 +35,16 @@ capabilities 😉
   throughout application lifetime for performance benefits.
 - Cached entries expiration (and exclusion) can be configured globally per named instance.
 
+## Some ideas
+
+- Per-request cache entry expiration options (
+  like [`MemoryCacheEntryOptions`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.memory.memorycacheentryoptions)
+  and similar) are technically possible; however due to how the `HttpClient` class is structured would require writing a
+  ton of wrapper methods that supply these options to each `HttpRequestMessage` (which can not be conveniently
+  overwritten); a task I am currently not fond of since it's a low priority anyway.
+- The upstream `Cache-Control` header is currently completely ignored; it could be taken into consideration, if the user
+  configured it to be honored.
+
 ## How to use
 
 Register one or
