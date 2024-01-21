@@ -138,6 +138,8 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
             };
 
         col.Insert(cacheEntry);
+        
+        _logger.LogDebug("Added new cached entry {Entry}", cacheEntry);
 
         // rewind and replace original stream
         responseMs.Position = 0;
