@@ -40,7 +40,7 @@ capabilities 😉
 Register one or
 more [named HTTP clients](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/http-requests#named-clients)
 with `AddLiteDbCache`. This example snippet registers a cached client that will query your public IP address
-using [`https://ifconfig.me/`](https://ifconfig.me/) and cache the response indefinitely to a local embedded database
+using [`https://ifconfig.me/`](https://ifconfig.me/) and cache the response for 10 minutes to a local embedded database
 instance:
 
 ```csharp
