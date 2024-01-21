@@ -55,4 +55,9 @@ public sealed class LiteDbCacheEntryOptions
             _slidingExpiration = value;
         }
     }
+
+    /// <summary>
+    /// Gets or sets whether a non-success HTTP response should also be added to the cache.
+    /// </summary>
+    public bool CacheErrors { get; set; } = false;
 }

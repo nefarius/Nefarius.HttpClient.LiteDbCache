@@ -66,6 +66,12 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
         // cache miss, send request
         HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
 
+        // skip cache if unsuccessful and configured to skip
+        if (!response.IsSuccessStatusCode && !options.EntryOptions.CacheErrors)
+        {
+            return response;
+        }
+
         MemoryStream responseMs = new();
         await response.Content.CopyToAsync(responseMs, cancellationToken);
 
@@ -81,7 +87,7 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
 
         col.Insert(cacheEntry);
 
-        // rewind and replace stream
+        // rewind and replace original stream
         responseMs.Position = 0;
         response.Content = new ByteArrayContent(responseMs.ToArray());
 
