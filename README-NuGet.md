@@ -38,6 +38,7 @@ capabilities 😉
   overwritten); a task I am currently not fond of since it's a low priority anyway.
 - The upstream `Cache-Control` header is currently completely ignored; it could be taken into consideration, if the user
   configured it to be honored.
+- Add some unit tests... maybe. Someday. 😅
 
 ## How to use
 
