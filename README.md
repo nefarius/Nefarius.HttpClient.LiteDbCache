@@ -33,6 +33,7 @@ builder.Services.AddHttpClient("ifconfig", cfg =>
     
 }).AddLiteDbCache(options =>
 {
+    // note: ensure that the path given already exists or you'll get a runtime exception
     options.ConnectionString = @"C:\Temp\ifconfig.db";
     options.CollectionName = "ifconfig-response-cache";
     options.EntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
