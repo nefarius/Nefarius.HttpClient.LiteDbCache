@@ -25,7 +25,9 @@ The goal of the cache is to survive application/service restarts.
 ### Why not use [`IDistributedCache`](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/distributed)?
 
 This library is aimed at end-user clients where you wish to drag in as little dependency on 3rd party services as
-possible. An embedded database sitting in some folder does the trick there perfectly.
+possible. An embedded database sitting in some folder does the trick there perfectly. It's usually not the brightest
+idea to require spinning up a Redis or MongoDB instance on a client's machine just to get some basic persisted storage
+capabilities 😉
 
 ## Features
 
