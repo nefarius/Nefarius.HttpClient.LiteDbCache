@@ -27,6 +27,12 @@ The goal of the cache is to survive application/service restarts.
 This library is aimed at end-user clients where you wish to drag in as little dependency on 3rd party services as
 possible. An embedded database sitting in some folder does the trick there perfectly.
 
+## Features
+
+- Each named HTTP client gets its own backing cache database instance which is kept exclusively open by default
+  throughout application lifetime for performance benefits.
+- Cached entries expiration (and exclusion) can be configured globally per named instance.
+
 ## How to use
 
 Register one or
