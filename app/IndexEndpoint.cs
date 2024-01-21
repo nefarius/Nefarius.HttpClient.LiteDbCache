@@ -31,8 +31,8 @@ public sealed class IndexEndpoint : EndpointWithoutRequest
             return;
         }
 
-        string? body = await result.Content.ReadAsStringAsync(ct);
+        string? ip = await result.Content.ReadAsStringAsync(ct);
 
-        await SendOkAsync(body, ct);
+        await SendOkAsync(ip, ct);
     }
 }

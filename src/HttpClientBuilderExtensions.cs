@@ -29,6 +29,16 @@ public static class HttpClientBuilderExtensions
 
         configuration.Invoke(dbOptions);
 
+        if (string.IsNullOrEmpty(dbOptions.ConnectionString))
+        {
+            throw new ArgumentException($"{nameof(LiteDbCacheDatabaseOptions.ConnectionString)} must not be empty");
+        }
+        
+        if (string.IsNullOrEmpty(dbOptions.CollectionName))
+        {
+            throw new ArgumentException($"{nameof(LiteDbCacheDatabaseOptions.CollectionName)} must not be empty");
+        }
+
         // link the name of the client to the database instance to use
         string name = builder.Name;
 
