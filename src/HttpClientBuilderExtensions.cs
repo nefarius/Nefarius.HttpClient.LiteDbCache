@@ -57,7 +57,7 @@ public static class HttpClientBuilderExtensions
 
         // stores name to database object association
         builder.Services.TryAddSingleton<CacheDatabaseInstances>();
-        
+
         // registers message handler
         builder.Services.AddTransient<LiteDbCacheHandler>(sp =>
         {
@@ -68,6 +68,12 @@ public static class HttpClientBuilderExtensions
         });
 
         // adds message handler to HTTP client
-        return builder.AddHttpMessageHandler<LiteDbCacheHandler>();
+        return builder.AddHttpMessageHandler(sp =>
+        {
+            LiteDbCacheHandler handler = ActivatorUtilities.CreateInstance<LiteDbCacheHandler>(sp,
+                sp.GetRequiredService<IOptionsSnapshot<DatabaseInstanceOptions>>(), builder.Name);
+
+            return handler;
+        });
     }
 }
