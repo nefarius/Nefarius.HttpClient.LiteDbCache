@@ -6,7 +6,17 @@
 
 Adds disk-based response caching to HttpClient named instances using LiteDB.
 
-Work in progress...
+Work in progress... 🔥
+
+## Motivation
+
+Sometimes a response from a remote HTTP service doesn't change frequently and fetching it again multiple times within a
+certain time span is wasteful and puts unnecessary delays on the caller. Offline caching to the rescue! However,
+manually storing and fetching responses gets verbose and complex fast, why not hide that complexity away and
+let `IHttpClientFactory` deal with it behind the scenes?
+
+This library provides the extension method `AddLiteDbCache` you can chain your named HTTP client call with and specify
+an embedded database location to use for offline caching, no other code changes are required.
 
 ## How to use
 
