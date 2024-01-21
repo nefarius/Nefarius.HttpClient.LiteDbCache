@@ -6,8 +6,6 @@
 
 Adds disk-based response caching to HttpClient named instances using LiteDB.
 
-Work in progress... 🔥
-
 ## Motivation
 
 Sometimes a response from a remote HTTP service doesn't change frequently and fetching it again multiple times within a
