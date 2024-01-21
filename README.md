@@ -25,6 +25,7 @@ builder.Services.AddHttpClient("ifconfig", cfg =>
 {
     options.ConnectionString = @"C:\Temp\ifconfig.db";
     options.CollectionName = "ifconfig-response-cache";
+    options.EntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
 });
 ```
 
