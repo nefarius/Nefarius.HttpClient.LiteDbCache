@@ -18,6 +18,15 @@ let `IHttpClientFactory` deal with it behind the scenes?
 This library provides the extension method `AddLiteDbCache` you can chain your named HTTP client call with and specify
 an embedded database location to use for offline caching, no other code changes are required.
 
+### Why not use [`IMemoryCache`](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/memory)?
+
+The goal of the cache is to survive application/service restarts.
+
+### Why not use [`IDistributedCache`](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/distributed)?
+
+This library is aimed at end-user clients where you wish to drag in as little dependency on 3rd party services as
+possible. An embedded database sitting in some folder does the trick there perfectly.
+
 ## How to use
 
 Register one or
