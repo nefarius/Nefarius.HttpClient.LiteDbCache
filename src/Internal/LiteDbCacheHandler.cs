@@ -43,6 +43,17 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
         DatabaseInstanceOptions options = _options.Get(_instanceName);
         LiteDbCacheEntryOptions entryOptions = options.EntryOptions;
 
+        // check for exclusion
+        if (entryOptions.UriExclusionRegex is not null &&
+            request.RequestUri is not null &&
+            entryOptions.UriExclusionRegex.IsMatch(request.RequestUri.ToString())
+           )
+        {
+            _logger.LogDebug("{@Request} excluded from caching as per {Regex}", request,
+                entryOptions.UriExclusionRegex);
+            return await base.SendAsync(request, cancellationToken);
+        }
+
         LiteDatabase db = _instances.GetDatabase(_instanceName);
 
         ILiteCollection<CachedHttpResponseMessage> col =

@@ -1,10 +1,15 @@
-﻿using System;
+﻿#nullable enable
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Text.RegularExpressions;
 
 namespace Nefarius.HttpClient.LiteDbCache.Options;
 
 /// <summary>
 ///     Provides the cache options for an entry in a LiteDb cache instance.
 /// </summary>
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
+[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 public sealed class LiteDbCacheEntryOptions
 {
     private TimeSpan? _absoluteExpirationRelativeToNow;
@@ -60,4 +65,9 @@ public sealed class LiteDbCacheEntryOptions
     ///     Gets or sets whether a non-success HTTP response should also be added to the cache.
     /// </summary>
     public bool CacheErrors { get; set; } = false;
+
+    /// <summary>
+    ///     Gets or sets a regular expression of URIs to exclude from caching.
+    /// </summary>
+    public Regex? UriExclusionRegex { get; set; }
 }
