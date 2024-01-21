@@ -46,10 +46,13 @@ public static class HttpClientBuilderExtensions
         builder.Services.Configure<DatabaseInstanceOptions>(name, options =>
         {
             options.ClientName = name;
-            options.Database = new LiteDatabase(dbOptions.ConnectionString);
+            options.ConnectionString = dbOptions.ConnectionString;
             options.CollectionName = dbOptions.CollectionName;
             options.EntryOptions = dbOptions.EntryOptions;
         });
+        
+        // stores name to database object association
+        builder.Services.TryAddSingleton<CacheDatabaseInstances>();
 
         // registers message handler
         builder.Services.TryAddTransient<LiteDbCacheHandler>(sp =>

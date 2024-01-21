@@ -13,6 +13,7 @@ builder.Services.AddHttpClient("ifconfig", cfg =>
 {
     options.ConnectionString = @"C:\Temp\MyData.db";
     options.CollectionName = "cache";
+    options.EntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
 });
 
 WebApplication app = builder.Build();

@@ -49,4 +49,9 @@ internal sealed class CachedHttpResponseMessage
     ///     Timestamp of last access.
     /// </summary>
     public DateTimeOffset? LastAccessedAt { get; set; } = null;
+
+    public override string ToString()
+    {
+        return $"{Uri} (ID: {Id})";
+    }
 }

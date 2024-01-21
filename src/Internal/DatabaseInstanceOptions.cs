@@ -10,7 +10,7 @@ internal sealed class DatabaseInstanceOptions
 
     public string CollectionName { get; internal set; }
 
-    public LiteDatabase Database { get; set; }
+    public string ConnectionString { get; set; }
 
     public LiteDbCacheEntryOptions EntryOptions { get; internal set; }
 }
