@@ -43,13 +43,10 @@ public static class HttpClientBuilderExtensions
             throw new ArgumentException($"{nameof(LiteDbCacheDatabaseOptions.EntryOptions)} must not be null");
         }
 
-        // link the name of the client to the database instance to use
-        string name = builder.Name;
-
         // store client name to database instance association
-        builder.Services.Configure<DatabaseInstanceOptions>(name, options =>
+        builder.Services.Configure<DatabaseInstanceOptions>(builder.Name, options =>
         {
-            options.ClientName = name;
+            options.ClientName = builder.Name;
             options.ConnectionString = dbOptions.ConnectionString;
             options.CollectionName = dbOptions.CollectionName;
             options.EntryOptions = dbOptions.EntryOptions;
