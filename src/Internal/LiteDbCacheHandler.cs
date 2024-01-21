@@ -115,10 +115,10 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
             }
 
             // add extra info for the caller to check if it was pulled from cache
-            cachedResponse.Headers.Add("X-LiteDb-Cache-Hit", true.ToString());
-            cachedResponse.Headers.Add("X-LiteDb-Cache-Id", cacheEntry.Id.ToString());
-            cachedResponse.Headers.Add("X-LiteDb-Cache-Instance", _instanceName);
-            cachedResponse.Headers.Add("X-LiteDb-Cache-Created-At",
+            cachedResponse.Headers.Add(LiteDbCacheHeaders.CacheHit, true.ToString());
+            cachedResponse.Headers.Add(LiteDbCacheHeaders.CacheId, cacheEntry.Id.ToString());
+            cachedResponse.Headers.Add(LiteDbCacheHeaders.CacheInstance, _instanceName);
+            cachedResponse.Headers.Add(LiteDbCacheHeaders.CacheCreatedAt,
                 cacheEntry.CreatedAt.ToString("o", CultureInfo.InvariantCulture));
 
             return cachedResponse;
