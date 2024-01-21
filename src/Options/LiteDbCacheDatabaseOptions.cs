@@ -12,6 +12,7 @@ public sealed class LiteDbCacheDatabaseOptions
     /// <summary>
     ///     The <see cref="LiteDB" /> connection string.
     /// </summary>
+    /// <remarks>See full documentation online at https://github.com/mbdavid/LiteDB/wiki/Connection-String</remarks>
     public string ConnectionString { get; set; }
 
     /// <summary>

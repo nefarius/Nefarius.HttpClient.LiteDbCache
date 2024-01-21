@@ -32,6 +32,7 @@ internal sealed class CacheDatabaseInstances : Dictionary<string, LiteDatabase>
             return db;
         }
 
+        // an IOptionsSnapshot is scoped
         using IServiceScope scope = _sp.CreateScope();
 
         IOptionsSnapshot<DatabaseInstanceOptions> options =
