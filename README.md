@@ -20,6 +20,7 @@ instance:
 builder.Services.AddHttpClient("ifconfig", cfg =>
 {
     cfg.BaseAddress = new Uri("https://ifconfig.me");
+    
 }).AddLiteDbCache(options =>
 {
     options.ConnectionString = @"C:\Temp\ifconfig.db";
