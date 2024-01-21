@@ -67,6 +67,9 @@ public static class HttpClientBuilderExtensions
             return handler;
         });
 
+        // housekeeping service takes care of clean DB shutdown
+        builder.Services.AddHostedService<HousekeepingService>();
+        
         // adds message handler to HTTP client
         return builder.AddHttpMessageHandler(sp =>
         {
