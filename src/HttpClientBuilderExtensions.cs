@@ -57,23 +57,22 @@ public static class HttpClientBuilderExtensions
 
         // registers message handler
         builder.Services.AddTransient<LiteDbCacheHandler>(sp =>
-        {
-            LiteDbCacheHandler handler = ActivatorUtilities.CreateInstance<LiteDbCacheHandler>(sp,
-                sp.GetRequiredService<IOptionsSnapshot<DatabaseInstanceOptions>>(), builder.Name);
+            ActivatorUtilities.CreateInstance<LiteDbCacheHandler>(
+                sp,
+                sp.GetRequiredService<IOptionsSnapshot<DatabaseInstanceOptions>>(),
+                builder.Name
+            )
+        );
 
-            return handler;
-        });
-
-        // housekeeping service takes care of clean DB shutdown
+        // housekeeping service takes care of clean DB shutdown etc.
         builder.Services.AddHostedService<HousekeepingService>();
-        
+
         // adds message handler to HTTP client
         return builder.AddHttpMessageHandler(sp =>
-        {
-            LiteDbCacheHandler handler = ActivatorUtilities.CreateInstance<LiteDbCacheHandler>(sp,
-                sp.GetRequiredService<IOptionsSnapshot<DatabaseInstanceOptions>>(), builder.Name);
-
-            return handler;
-        });
+            ActivatorUtilities.CreateInstance<LiteDbCacheHandler>(sp,
+                sp.GetRequiredService<IOptionsSnapshot<DatabaseInstanceOptions>>(),
+                builder.Name
+            )
+        );
     }
 }
