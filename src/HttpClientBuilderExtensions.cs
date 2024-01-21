@@ -38,6 +38,11 @@ public static class HttpClientBuilderExtensions
             throw new ArgumentException($"{nameof(LiteDbCacheDatabaseOptions.CollectionName)} must not be empty");
         }
 
+        if (dbOptions.EntryOptions is null)
+        {
+            throw new ArgumentException($"{nameof(LiteDbCacheDatabaseOptions.EntryOptions)} must not be null");
+        }
+
         // link the name of the client to the database instance to use
         string name = builder.Name;
 
