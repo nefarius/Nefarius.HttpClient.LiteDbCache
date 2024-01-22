@@ -48,6 +48,8 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
                 new HttpRequestOptionsKey<LiteDbCacheEntryOptions>(LiteDbCacheHttpRequestOptions.EntryOptions),
                 out LiteDbCacheEntryOptions entryOpts))
         {
+            _logger.LogDebug("Request-specific caching options found, overriding global options");
+
             // if a request-specific options set exists it takes priority over the global one
             entryOptions = entryOpts;
         }
@@ -59,6 +61,7 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
         {
             _logger.LogDebug("{@Request} excluded from caching as per {Regex}", request,
                 entryOptions.UriExclusionRegex);
+            
             return await base.SendAsync(request, cancellationToken);
         }
 
