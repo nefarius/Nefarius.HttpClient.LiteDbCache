@@ -59,8 +59,10 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
         ILiteCollection<CachedHttpResponseMessage> col =
             db.GetCollection<CachedHttpResponseMessage>(options.CollectionName);
 
+        string requestKey = await request.ToCacheKey(cancellationToken);
+
         // probe cache
-        CachedHttpResponseMessage cacheEntry = col.FindOne(message => message.Uri == request.RequestUri);
+        CachedHttpResponseMessage cacheEntry = col.FindOne(message => message.Key == requestKey);
 
         // cache hit
         if (cacheEntry is not null)
@@ -79,8 +81,7 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
 
             // absolute period has been reached
             if (entryOptions.AbsoluteExpirationRelativeToNow is not null &&
-                cacheEntry.CreatedAt.Add(entryOptions.AbsoluteExpirationRelativeToNow.Value) <= DateTimeOffset.UtcNow
-               )
+                cacheEntry.CreatedAt.Add(entryOptions.AbsoluteExpirationRelativeToNow.Value) <= DateTimeOffset.UtcNow)
             {
                 _logger.LogDebug("Absolute lifetime period {AbsoluteExpirationRelativeToNow} expired for {CacheEntry}",
                     entryOptions.AbsoluteExpirationRelativeToNow, cacheEntry);
@@ -91,8 +92,7 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
             // sliding period expired
             if (entryOptions.SlidingExpiration is not null &&
                 cacheEntry.LastAccessedAt is not null &&
-                cacheEntry.LastAccessedAt.Value.Add(entryOptions.SlidingExpiration.Value) <= DateTimeOffset.UtcNow
-               )
+                cacheEntry.LastAccessedAt.Value.Add(entryOptions.SlidingExpiration.Value) <= DateTimeOffset.UtcNow)
             {
                 _logger.LogDebug("Sliding lifetime period {SlidingExpiration} expired for {CacheEntry}",
                     entryOptions.SlidingExpiration, cacheEntry);
@@ -145,7 +145,7 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
         cacheEntry =
             new CachedHttpResponseMessage
             {
-                Uri = request.RequestUri,
+                Key = requestKey,
                 StatusCode = response.StatusCode,
                 Content = responseMs.ToArray(),
                 Headers = response.Headers.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToList())

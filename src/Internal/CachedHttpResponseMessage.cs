@@ -21,9 +21,9 @@ internal sealed class CachedHttpResponseMessage
     public ObjectId Id { get; set; }
 
     /// <summary>
-    ///     Request URI to match.
+    ///     The key (SHA256 hash) to match against.
     /// </summary>
-    public Uri Uri { get; set; }
+    public string Key { get; set; }
 
     /// <summary>
     ///     Response HTTP headers.
@@ -52,6 +52,6 @@ internal sealed class CachedHttpResponseMessage
 
     public override string ToString()
     {
-        return $"{Uri} (ID: {Id})";
+        return $"{Key} (ID: {Id})";
     }
 }
