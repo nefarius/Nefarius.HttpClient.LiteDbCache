@@ -12,7 +12,7 @@ namespace Nefarius.HttpClient.LiteDbCache.Internal;
 internal static class HttpRequestMessageExtensions
 {
     /// <summary>
-    ///     Calculates a fingerprint (hash) key for a given <see cref="HttpRequestMessage"/>. 
+    ///     Calculates a fingerprint (hash) key for a given <see cref="HttpRequestMessage" />.
     /// </summary>
     /// <param name="request">The request to hash.</param>
     /// <param name="ct">Optional cancellation token.</param>
@@ -28,14 +28,18 @@ internal static class HttpRequestMessageExtensions
 
         using SHA256 alg = SHA256.Create();
 
-        if (request.Method == HttpMethod.Get)
+        if (request.Method == HttpMethod.Get ||
+            request.Method == HttpMethod.Head ||
+            request.Method == HttpMethod.Delete)
         {
             byte[] hash = alg.ComputeHash(Encoding.UTF8.GetBytes(request.RequestUri.ToString()));
 
             return hash.ToHexString();
         }
 
-        if (request.Method == HttpMethod.Post)
+        if (request.Method == HttpMethod.Post ||
+            request.Method == HttpMethod.Patch ||
+            request.Method == HttpMethod.Put)
         {
             byte[] uriBytes = Encoding.UTF8.GetBytes(request.RequestUri.ToString());
             byte[] contentBytes = await request.Content!.ReadAsByteArrayAsync(ct);
