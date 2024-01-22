@@ -5,6 +5,8 @@ using FastEndpoints;
 
 using Nefarius.HttpClient.LiteDbCache;
 
+using TestWebApp;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder();
 
 builder.Services.AddFastEndpoints();
@@ -17,6 +19,20 @@ builder.Services.AddHttpClient("ifconfig", cfg =>
     string cacheDir = Path.Combine(Path.GetDirectoryName(Environment.ProcessPath!)!, "caches");
     Directory.CreateDirectory(cacheDir);
     string dbPath = Path.Combine(cacheDir, "ifconfig.db");
+
+    options.ConnectionString = dbPath;
+    options.CollectionName = "cache";
+    options.EntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
+});
+
+builder.Services.AddHttpClient("httpbin", cfg =>
+{
+    cfg.BaseAddress = new Uri("https://httpbin.org");
+}).AddLiteDbCache(options =>
+{
+    string cacheDir = Path.Combine(Path.GetDirectoryName(Environment.ProcessPath!)!, "caches");
+    Directory.CreateDirectory(cacheDir);
+    string dbPath = Path.Combine(cacheDir, "httpbin.db");
 
     options.ConnectionString = dbPath;
     options.CollectionName = "cache";
@@ -71,6 +87,8 @@ builder.Services.AddHttpClient("InternetConnectivityCheck")
             }
         };
     });
+
+builder.Services.AddHostedService<DemoService>();
 
 WebApplication app = builder.Build();
 

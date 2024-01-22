@@ -19,22 +19,6 @@ public sealed class IndexEndpoint : EndpointWithoutRequest
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        HttpClient internet = _clientFactory.CreateClient("InternetConnectivityCheck");
-
-        var ret = await internet.GetAsync("https://www.gstatic.com/generate_204", ct);
-        
-        HttpClient client = _clientFactory.CreateClient("ifconfig");
-
-        HttpResponseMessage result = await client.GetAsync("/", ct);
-
-        if (!result.IsSuccessStatusCode)
-        {
-            await SendNotFoundAsync(ct);
-            return;
-        }
-
-        string? ip = await result.Content.ReadAsStringAsync(ct);
-
-        await SendOkAsync(ip, ct);
+        await SendOkAsync(ct);
     }
 }
