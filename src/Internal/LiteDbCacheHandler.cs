@@ -43,11 +43,19 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
         DatabaseInstanceOptions options = _options.Get(_instanceName);
         LiteDbCacheEntryOptions entryOptions = options.EntryOptions;
 
+        // probe for request-specific cache options
+        if (request.Options.TryGetValue(
+                new HttpRequestOptionsKey<LiteDbCacheEntryOptions>(LiteDbCacheHttpRequestOptions.EntryOptions),
+                out LiteDbCacheEntryOptions entryOpts))
+        {
+            // if a request-specific options set exists it takes priority over the global one
+            entryOptions = entryOpts;
+        }
+
         // check for exclusion
         if (entryOptions.UriExclusionRegex is not null &&
             request.RequestUri is not null &&
-            entryOptions.UriExclusionRegex.IsMatch(request.RequestUri.ToString())
-           )
+            entryOptions.UriExclusionRegex.IsMatch(request.RequestUri.ToString()))
         {
             _logger.LogDebug("{@Request} excluded from caching as per {Regex}", request,
                 entryOptions.UriExclusionRegex);
