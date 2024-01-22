@@ -15,6 +15,8 @@ internal sealed class DemoService : BackgroundService
             .CreateClient("httpbin")
             .PostAsync("/post", new StringContent("key=value"), stoppingToken);
 
+        string postBody = await postRet.Content.ReadAsStringAsync(stoppingToken);
+
         HttpResponseMessage checkRet = await _clientFactory
             .CreateClient("InternetConnectivityCheck")
             .GetAsync("https://www.gstatic.com/generate_204", stoppingToken);
