@@ -32,6 +32,7 @@ internal static class HttpRequestMessageExtensions
             request.Method == HttpMethod.Head ||
             request.Method == HttpMethod.Delete)
         {
+            // turn full request URI into cache key
             byte[] hash = alg.ComputeHash(Encoding.UTF8.GetBytes(request.RequestUri.ToString()));
 
             return hash.ToHexString();
@@ -46,6 +47,7 @@ internal static class HttpRequestMessageExtensions
 
             request.Content = new ByteArrayContent(contentBytes);
 
+            // use request URI and payload to calculate cache key
             byte[] hash = alg.ComputeHash(uriBytes.Concat(contentBytes).ToArray());
 
             return hash.ToHexString();
