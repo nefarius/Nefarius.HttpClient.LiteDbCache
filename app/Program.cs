@@ -1,15 +1,12 @@
 using System.Net;
 using System.Net.Sockets;
 
-using FastEndpoints;
-
 using Nefarius.HttpClient.LiteDbCache;
 
 using TestWebApp;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder();
 
-builder.Services.AddFastEndpoints();
 
 builder.Services.AddHttpClient("ifconfig", cfg =>
 {
@@ -91,7 +88,5 @@ builder.Services.AddHttpClient("InternetConnectivityCheck")
 builder.Services.AddHostedService<DemoService>();
 
 WebApplication app = builder.Build();
-
-app.UseFastEndpoints();
 
 app.Run();
