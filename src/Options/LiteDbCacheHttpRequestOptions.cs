@@ -1,8 +1,6 @@
 ﻿using System.Net.Http;
 
-using Nefarius.HttpClient.LiteDbCache.Options;
-
-namespace Nefarius.HttpClient.LiteDbCache;
+namespace Nefarius.HttpClient.LiteDbCache.Options;
 
 /// <summary>
 ///     Cache-specific options for <see cref="HttpRequestMessage"/>.
