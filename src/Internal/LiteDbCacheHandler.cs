@@ -20,35 +20,26 @@ namespace Nefarius.HttpClient.LiteDbCache.Internal;
 ///     Pulls a cached <see cref="HttpResponseMessage" /> from a <see cref="LiteDatabase" /> cache instance, if available.
 ///     Also does housekeeping like scrubbing expired entries etc.
 /// </summary>
-internal sealed class LiteDbCacheHandler : DelegatingHandler
+internal sealed class LiteDbCacheHandler(
+    IOptionsSnapshot<DatabaseInstanceOptions> options,
+    string instanceName,
+    ILogger<LiteDbCacheHandler> logger,
+    CacheDatabaseInstances instances)
+    : DelegatingHandler
 {
-    private readonly string _instanceName;
-    private readonly CacheDatabaseInstances _instances;
-    private readonly ILogger<LiteDbCacheHandler> _logger;
-    private readonly IOptionsSnapshot<DatabaseInstanceOptions> _options;
-
-    public LiteDbCacheHandler(IOptionsSnapshot<DatabaseInstanceOptions> options, string instanceName,
-        ILogger<LiteDbCacheHandler> logger, CacheDatabaseInstances instances)
-    {
-        _options = options;
-        _instanceName = instanceName;
-        _logger = logger;
-        _instances = instances;
-    }
-
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
         // get instance options
-        DatabaseInstanceOptions options = _options.Get(_instanceName);
-        LiteDbCacheEntryOptions entryOptions = options.EntryOptions;
+        DatabaseInstanceOptions options1 = options.Get(instanceName);
+        LiteDbCacheEntryOptions entryOptions = options1.EntryOptions;
 
         // probe for request-specific cache options
         if (request.Options.TryGetValue(
                 new HttpRequestOptionsKey<LiteDbCacheEntryOptions>(LiteDbCacheHttpRequestOptions.EntryOptions),
                 out LiteDbCacheEntryOptions entryOpts))
         {
-            _logger.LogDebug("Request-specific caching options found, overriding global options");
+            logger.LogDebug("Request-specific caching options found, overriding global options");
 
             // if a request-specific options set exists it takes priority over the global one
             entryOptions = entryOpts;
@@ -59,16 +50,16 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
             request.RequestUri is not null &&
             entryOptions.UriExclusionRegex.IsMatch(request.RequestUri.ToString()))
         {
-            _logger.LogDebug("{@Request} excluded from caching as per {Regex}", request,
+            logger.LogDebug("{@Request} excluded from caching as per {Regex}", request,
                 entryOptions.UriExclusionRegex);
-            
+
             return await base.SendAsync(request, cancellationToken);
         }
 
-        LiteDatabase db = _instances.GetDatabase(_instanceName);
+        LiteDatabase db = instances.GetDatabase(instanceName);
 
         ILiteCollection<CachedHttpResponseMessage> col =
-            db.GetCollection<CachedHttpResponseMessage>(options.CollectionName);
+            db.GetCollection<CachedHttpResponseMessage>(options1.CollectionName);
 
         string requestKey = await request.ToCacheKey(cancellationToken);
 
@@ -78,13 +69,13 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
         // cache hit
         if (cacheEntry is not null)
         {
-            _logger.LogDebug("Cached entry found for {@Request}", request);
+            logger.LogDebug("Cached entry found for {@Request}", request);
 
             // absolute lifetime expired
             if (entryOptions.AbsoluteExpiration is not null &&
                 entryOptions.AbsoluteExpiration <= DateTimeOffset.UtcNow)
             {
-                _logger.LogDebug("Absolute lifetime {AbsoluteExpiration} expired for {CacheEntry}",
+                logger.LogDebug("Absolute lifetime {AbsoluteExpiration} expired for {CacheEntry}",
                     entryOptions.AbsoluteExpiration, cacheEntry);
                 col.Delete(cacheEntry.Id);
                 goto fetch;
@@ -94,7 +85,7 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
             if (entryOptions.AbsoluteExpirationRelativeToNow is not null &&
                 cacheEntry.CreatedAt.Add(entryOptions.AbsoluteExpirationRelativeToNow.Value) <= DateTimeOffset.UtcNow)
             {
-                _logger.LogDebug("Absolute lifetime period {AbsoluteExpirationRelativeToNow} expired for {CacheEntry}",
+                logger.LogDebug("Absolute lifetime period {AbsoluteExpirationRelativeToNow} expired for {CacheEntry}",
                     entryOptions.AbsoluteExpirationRelativeToNow, cacheEntry);
                 col.Delete(cacheEntry.Id);
                 goto fetch;
@@ -105,7 +96,7 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
                 cacheEntry.LastAccessedAt is not null &&
                 cacheEntry.LastAccessedAt.Value.Add(entryOptions.SlidingExpiration.Value) <= DateTimeOffset.UtcNow)
             {
-                _logger.LogDebug("Sliding lifetime period {SlidingExpiration} expired for {CacheEntry}",
+                logger.LogDebug("Sliding lifetime period {SlidingExpiration} expired for {CacheEntry}",
                     entryOptions.SlidingExpiration, cacheEntry);
                 col.Delete(cacheEntry.Id);
                 goto fetch;
@@ -128,7 +119,7 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
             // add extra info for the caller to check if it was pulled from cache
             cachedResponse.Headers.Add(LiteDbCacheHeaders.CacheHit, true.ToString());
             cachedResponse.Headers.Add(LiteDbCacheHeaders.CacheId, cacheEntry.Id.ToString());
-            cachedResponse.Headers.Add(LiteDbCacheHeaders.CacheInstance, _instanceName);
+            cachedResponse.Headers.Add(LiteDbCacheHeaders.CacheInstance, instanceName);
             cachedResponse.Headers.Add(LiteDbCacheHeaders.CacheCreatedAt,
                 cacheEntry.CreatedAt.ToString("o", CultureInfo.InvariantCulture));
 
@@ -137,15 +128,15 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
 
         fetch:
 
-        _logger.LogDebug("Sending request to remote target for {@Request}", request);
+        logger.LogDebug("Sending request to remote target for {@Request}", request);
 
         // cache miss, send request
         HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
 
         // skip cache if unsuccessful and configured to skip
-        if (!response.IsSuccessStatusCode && !options.EntryOptions.CacheErrors)
+        if (!response.IsSuccessStatusCode && !options1.EntryOptions.CacheErrors)
         {
-            _logger.LogDebug("Remote request didn't succeed, skipping caching {@Request}", request);
+            logger.LogDebug("Remote request didn't succeed, skipping caching {@Request}", request);
             return response;
         }
 
@@ -164,7 +155,7 @@ internal sealed class LiteDbCacheHandler : DelegatingHandler
 
         col.Insert(cacheEntry);
 
-        _logger.LogDebug("Added new cached entry {Entry}", cacheEntry);
+        logger.LogDebug("Added new cached entry {Entry}", cacheEntry);
 
         // rewind and replace original stream
         responseMs.Position = 0;

@@ -11,6 +11,8 @@ namespace Nefarius.HttpClient.LiteDbCache.Internal;
 /// <summary>
 ///     Describes a serializable <see cref="HttpResponseMessage" /> cache entry.
 /// </summary>
+[SuppressMessage("ReSharper", "PropertyCanBeMadeInitOnly.Global")]
+[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 internal sealed class CachedHttpResponseMessage
 {
     /// <summary>
@@ -48,7 +50,7 @@ internal sealed class CachedHttpResponseMessage
     /// <summary>
     ///     Timestamp of last access.
     /// </summary>
-    public DateTimeOffset? LastAccessedAt { get; set; } = null;
+    public DateTimeOffset? LastAccessedAt { get; set; }
 
     public override string ToString()
     {

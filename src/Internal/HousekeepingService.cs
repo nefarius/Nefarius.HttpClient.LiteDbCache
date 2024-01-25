@@ -7,23 +7,15 @@ using Microsoft.Extensions.Hosting;
 
 namespace Nefarius.HttpClient.LiteDbCache.Internal;
 
-internal sealed class HousekeepingService : BackgroundService
+internal sealed class HousekeepingService(CacheDatabaseInstances instances, IHostApplicationLifetime lifetime)
+    : BackgroundService
 {
-    private readonly CacheDatabaseInstances _instances;
-    private readonly IHostApplicationLifetime _lifetime;
-
-    public HousekeepingService(CacheDatabaseInstances instances, IHostApplicationLifetime lifetime)
-    {
-        _instances = instances;
-        _lifetime = lifetime;
-    }
-
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _lifetime.ApplicationStopping.Register(() =>
+        lifetime.ApplicationStopping.Register(() =>
         {
             // dispose instances properly
-            foreach ((string _, LiteDatabase db) in _instances)
+            foreach ((string _, LiteDatabase db) in instances)
             {
                 db.Dispose();
             }
