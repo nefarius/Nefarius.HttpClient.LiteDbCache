@@ -13,6 +13,8 @@ namespace Nefarius.HttpClient.LiteDbCache.Internal;
 /// </summary>
 internal sealed class CacheDatabaseInstances(IServiceProvider sp) : Dictionary<string, LiteDatabase>
 {
+    private readonly object _lock = new();
+
     /// <summary>
     ///     Gets (or creates) a <see cref="LiteDatabase" /> instance for a given name.
     /// </summary>
@@ -20,23 +22,26 @@ internal sealed class CacheDatabaseInstances(IServiceProvider sp) : Dictionary<s
     /// <returns>The <see cref="LiteDatabase" /> object.</returns>
     public LiteDatabase GetDatabase(string name)
     {
-        if (TryGetValue(name, out LiteDatabase db))
+        lock (_lock)
         {
+            if (TryGetValue(name, out LiteDatabase db))
+            {
+                return db;
+            }
+
+            // an IOptionsSnapshot is scoped
+            using IServiceScope scope = sp.CreateScope();
+
+            IOptionsSnapshot<DatabaseInstanceOptions> options =
+                scope.ServiceProvider.GetRequiredService<IOptionsSnapshot<DatabaseInstanceOptions>>();
+
+            DatabaseInstanceOptions instance = options.Get(name);
+
+            db = new LiteDatabase(instance.ConnectionString);
+
+            Add(name, db);
+
             return db;
         }
-
-        // an IOptionsSnapshot is scoped
-        using IServiceScope scope = sp.CreateScope();
-
-        IOptionsSnapshot<DatabaseInstanceOptions> options =
-            scope.ServiceProvider.GetRequiredService<IOptionsSnapshot<DatabaseInstanceOptions>>();
-
-        DatabaseInstanceOptions instance = options.Get(name);
-
-        db = new LiteDatabase(instance.ConnectionString);
-
-        Add(name, db);
-
-        return db;
     }
 }
