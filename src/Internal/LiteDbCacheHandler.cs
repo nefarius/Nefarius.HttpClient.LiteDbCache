@@ -31,8 +31,8 @@ internal sealed class LiteDbCacheHandler(
         CancellationToken cancellationToken)
     {
         // get instance options
-        DatabaseInstanceOptions options1 = options.Get(instanceName);
-        LiteDbCacheEntryOptions entryOptions = options1.EntryOptions;
+        DatabaseInstanceOptions instanceOptions = options.Get(instanceName);
+        LiteDbCacheEntryOptions entryOptions = instanceOptions.EntryOptions;
 
         // probe for request-specific cache options
         if (request.Options.TryGetValue(
@@ -59,7 +59,7 @@ internal sealed class LiteDbCacheHandler(
         LiteDatabase db = instances.GetDatabase(instanceName);
 
         ILiteCollection<CachedHttpResponseMessage> col =
-            db.GetCollection<CachedHttpResponseMessage>(options1.CollectionName);
+            db.GetCollection<CachedHttpResponseMessage>(instanceOptions.CollectionName);
 
         string requestKey = await request.ToCacheKey(cancellationToken);
 
@@ -134,7 +134,7 @@ internal sealed class LiteDbCacheHandler(
         HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
 
         // skip cache if unsuccessful and configured to skip
-        if (!response.IsSuccessStatusCode && !options1.EntryOptions.CacheErrors)
+        if (!response.IsSuccessStatusCode && !instanceOptions.EntryOptions.CacheErrors)
         {
             logger.LogDebug("Remote request didn't succeed, skipping caching {@Request}", request);
             return response;
