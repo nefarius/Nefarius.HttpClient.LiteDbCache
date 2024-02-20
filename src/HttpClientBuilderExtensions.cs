@@ -54,6 +54,9 @@ public static class HttpClientBuilderExtensions
 
         // stores name to database object association
         builder.Services.TryAddSingleton<LiteDbCacheDatabaseInstances>();
+        // exposes a public interface 
+        builder.Services.TryAddSingleton<ILiteDbCacheDatabaseInstances>(sp =>
+            sp.GetRequiredService<LiteDbCacheDatabaseInstances>());
 
         // registers message handler
         builder.Services.AddTransient<LiteDbCacheHandler>(sp =>
