@@ -53,7 +53,7 @@ public static class HttpClientBuilderExtensions
         });
 
         // stores name to database object association
-        builder.Services.TryAddSingleton<CacheDatabaseInstances>();
+        builder.Services.TryAddSingleton<LiteDbCacheDatabaseInstances>();
 
         // registers message handler
         builder.Services.AddTransient<LiteDbCacheHandler>(sp =>

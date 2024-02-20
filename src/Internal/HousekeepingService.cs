@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Nefarius.HttpClient.LiteDbCache.Internal;
 
-internal sealed class HousekeepingService(CacheDatabaseInstances instances, IHostApplicationLifetime lifetime)
+internal sealed class HousekeepingService(LiteDbCacheDatabaseInstances instances, IHostApplicationLifetime lifetime)
     : BackgroundService
 {
     protected override Task ExecuteAsync(CancellationToken stoppingToken)

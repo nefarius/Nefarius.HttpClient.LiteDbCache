@@ -24,7 +24,7 @@ internal sealed class LiteDbCacheHandler(
     IOptionsSnapshot<DatabaseInstanceOptions> options,
     string instanceName,
     ILogger<LiteDbCacheHandler> logger,
-    CacheDatabaseInstances instances)
+    LiteDbCacheDatabaseInstances instances)
     : DelegatingHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,

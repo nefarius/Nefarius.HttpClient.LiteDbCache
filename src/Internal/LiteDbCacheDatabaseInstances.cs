@@ -11,7 +11,7 @@ namespace Nefarius.HttpClient.LiteDbCache.Internal;
 /// <summary>
 ///     Holds the association if HTTP client name to database instance.
 /// </summary>
-internal sealed class CacheDatabaseInstances(IServiceProvider sp) : Dictionary<string, LiteDatabase>
+internal sealed class LiteDbCacheDatabaseInstances(IServiceProvider sp) : Dictionary<string, LiteDatabase>
 {
     private readonly object _lock = new();
 
