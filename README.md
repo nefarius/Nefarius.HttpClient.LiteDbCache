@@ -79,6 +79,18 @@ string? publicIP = await result.Content.ReadAsStringAsync(ct);
 If a cached entry exists, the response (headers, body content etc.) will be pulled and returned from the local database
 and no remote web request will be issued until the cache entry expires.
 
+## Documentation
+
+[Link to API docs](docs/index.md).
+
+### Generating documentation
+
+```PowerShell
+dotnet build -c:Release
+dotnet tool install -g XMLDoc2Markdown
+xmldoc2md .\bin\net7.0\Nefarius.HttpClient.LiteDbCache.dll .\docs\
+```
+
 ## Sources & 3rd party credits
 
 This library benefits from these awesome projects ❤ (appearance in no special order):
