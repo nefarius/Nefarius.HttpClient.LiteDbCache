@@ -20,7 +20,7 @@ internal sealed class LiteDbCacheDatabaseInstances(IServiceProvider sp) : Dictio
     /// </summary>
     /// <param name="name">The client/instance name.</param>
     /// <returns>The <see cref="LiteDatabase" /> object.</returns>
-    public LiteDatabase GetDatabase(string name)
+    public LiteDatabase GetOrCreateDatabase(string name)
     {
         lock (_lock)
         {

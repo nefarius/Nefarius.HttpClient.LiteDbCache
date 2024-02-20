@@ -56,7 +56,7 @@ internal sealed class LiteDbCacheHandler(
             return await base.SendAsync(request, cancellationToken);
         }
 
-        LiteDatabase db = instances.GetDatabase(instanceName);
+        LiteDatabase db = instances.GetOrCreateDatabase(instanceName);
 
         ILiteCollection<CachedHttpResponseMessage> col =
             db.GetCollection<CachedHttpResponseMessage>(instanceOptions.CollectionName);
