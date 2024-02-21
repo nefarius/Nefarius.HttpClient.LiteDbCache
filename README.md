@@ -79,6 +79,13 @@ string? publicIP = await result.Content.ReadAsStringAsync(ct);
 If a cached entry exists, the response (headers, body content etc.) will be pulled and returned from the local database
 and no remote web request will be issued until the cache entry expires.
 
+## Advanced usage
+
+### Cache database access
+
+Inject the `ILiteDbCacheDatabaseInstances` interface to get access to the `LiteDatabase` instances and other database
+management methods (cache purge and alike).
+
 ## Documentation
 
 [Link to API docs](docs/index.md).
