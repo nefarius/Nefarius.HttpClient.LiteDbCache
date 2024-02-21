@@ -17,4 +17,10 @@ public interface ILiteDbCacheDatabaseInstances
     /// <param name="name">The client/instance name.</param>
     /// <returns>The <see cref="LiteDatabase" /> object or null if not found.</returns>
     LiteDatabase? GetDatabase(string name);
+
+    /// <summary>
+    ///     Purges all cached entries for the given instance.
+    /// </summary>
+    /// <param name="name">The client/instance name.</param>
+    void Purge(string name);
 }
