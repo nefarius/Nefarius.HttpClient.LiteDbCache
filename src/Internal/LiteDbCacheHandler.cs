@@ -108,9 +108,14 @@ internal sealed class LiteDbCacheHandler(
 
             // deserialize cached response
             HttpResponseMessage cachedResponse = request.CreateResponse(cacheEntry.StatusCode);
-            cachedResponse.Content = new ByteArrayContent(cacheEntry.Content);
 
-            // clone headers
+            // might not have been cached
+            if (cacheEntry.Content is not null)
+            {
+                cachedResponse.Content = new ByteArrayContent(cacheEntry.Content);
+            }
+
+            // clone headers (might be empty)
             foreach ((string key, List<string> value) in cacheEntry.Headers)
             {
                 cachedResponse.Headers.Add(key, value);
@@ -144,16 +149,18 @@ internal sealed class LiteDbCacheHandler(
         await response.Content.CopyToAsync(responseMs, cancellationToken);
 
         // copy response to cache-able item
-        cacheEntry =
-            new CachedHttpResponseMessage
-            {
-                Key = requestKey, StatusCode = response.StatusCode, Content = responseMs.ToArray()
-            };
+        cacheEntry = new CachedHttpResponseMessage { Key = requestKey, StatusCode = response.StatusCode };
 
         // clone headers only if desired
         if (entryOptions.CacheResponseHeaders)
         {
             cacheEntry.Headers = response.Headers.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToList());
+        }
+
+        // omit content, if configured
+        if (entryOptions.CacheResponseContent)
+        {
+            cacheEntry.Content = responseMs.ToArray();
         }
 
         col.Insert(cacheEntry);

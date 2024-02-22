@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
@@ -20,12 +21,12 @@ internal sealed class CachedHttpResponseMessage
     /// </summary>
     [BsonId]
     [SuppressMessage("ReSharper", "UnusedMember.Global")]
-    public ObjectId Id { get; set; }
+    public ObjectId Id { get; set; } = null!;
 
     /// <summary>
     ///     The key (SHA256 hash) to match against.
     /// </summary>
-    public string Key { get; set; }
+    public string Key { get; set; } = null!;
 
     /// <summary>
     ///     Response HTTP headers.
@@ -40,7 +41,7 @@ internal sealed class CachedHttpResponseMessage
     /// <summary>
     ///     Binary blob of response content.
     /// </summary>
-    public byte[] Content { get; set; }
+    public byte[]? Content { get; set; }
 
     /// <summary>
     ///     Timestamp of entry creation.

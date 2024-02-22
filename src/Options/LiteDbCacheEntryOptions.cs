@@ -64,6 +64,7 @@ public sealed class LiteDbCacheEntryOptions
     /// <summary>
     ///     Gets or sets whether a non-success HTTP response should also be added to the cache.
     /// </summary>
+    /// <remarks>Disabled by default.</remarks>
     public bool CacheErrors { get; set; } = false;
 
     /// <summary>
@@ -74,5 +75,12 @@ public sealed class LiteDbCacheEntryOptions
     /// <summary>
     ///     Gets or sets whether the response headers should be cached for each request in addition to the content.
     /// </summary>
+    /// <remarks>Enabled by default.</remarks>
     public bool CacheResponseHeaders { get; set; } = true;
+
+    /// <summary>
+    ///     Gets or sets whether the response content (body) should be cached.
+    /// </summary>
+    /// <remarks>Enabled by default.</remarks>
+    public bool CacheResponseContent { get; set; } = true;
 }
