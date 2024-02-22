@@ -147,11 +147,14 @@ internal sealed class LiteDbCacheHandler(
         cacheEntry =
             new CachedHttpResponseMessage
             {
-                Key = requestKey,
-                StatusCode = response.StatusCode,
-                Content = responseMs.ToArray(),
-                Headers = response.Headers.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToList())
+                Key = requestKey, StatusCode = response.StatusCode, Content = responseMs.ToArray()
             };
+
+        // clone headers only if desired
+        if (entryOptions.CacheResponseHeaders)
+        {
+            cacheEntry.Headers = response.Headers.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToList());
+        }
 
         col.Insert(cacheEntry);
 
