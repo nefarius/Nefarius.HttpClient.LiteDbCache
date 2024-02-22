@@ -48,6 +48,26 @@ public bool CacheErrors { get; set; }
 
 [Boolean](https://docs.microsoft.com/en-us/dotnet/api/system.boolean)<br>
 
+**Remarks:**
+
+Disabled by default.
+
+### <a id="properties-cacheresponsecontent"/>**CacheResponseContent**
+
+Gets or sets whether the response content (body) should be cached.
+
+```csharp
+public bool CacheResponseContent { get; set; }
+```
+
+#### Property Value
+
+[Boolean](https://docs.microsoft.com/en-us/dotnet/api/system.boolean)<br>
+
+**Remarks:**
+
+Enabled by default.
+
 ### <a id="properties-cacheresponseheaders"/>**CacheResponseHeaders**
 
 Gets or sets whether the response headers should be cached for each request in addition to the content.
@@ -59,6 +79,10 @@ public bool CacheResponseHeaders { get; set; }
 #### Property Value
 
 [Boolean](https://docs.microsoft.com/en-us/dotnet/api/system.boolean)<br>
+
+**Remarks:**
+
+Enabled by default.
 
 ### <a id="properties-slidingexpiration"/>**SlidingExpiration**
 
