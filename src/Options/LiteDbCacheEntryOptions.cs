@@ -70,4 +70,9 @@ public sealed class LiteDbCacheEntryOptions
     ///     Gets or sets a regular expression of URIs to exclude from caching.
     /// </summary>
     public Regex? UriExclusionRegex { get; set; }
+
+    /// <summary>
+    ///     Gets or sets whether the response headers should be cached for each request in addition to the content.
+    /// </summary>
+    public bool CacheResponseHeaders { get; set; } = true;
 }
