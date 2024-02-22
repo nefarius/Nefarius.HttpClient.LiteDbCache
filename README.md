@@ -93,9 +93,9 @@ management methods (cache purge and alike).
 ### Generating documentation
 
 ```PowerShell
-dotnet build -c:Release
-dotnet tool install -g XMLDoc2Markdown
-xmldoc2md .\bin\net7.0\Nefarius.HttpClient.LiteDbCache.dll .\docs\
+dotnet tool install --global Nefarius.Tools.XMLDoc2Markdown
+dotnet publish -c Release -f net7.0 .\src\Nefarius.HttpClient.LiteDbCache.csproj
+xmldoc2md .\bin\net7.0\publish\Nefarius.HttpClient.LiteDbCache.dll .\docs\
 ```
 
 ## Sources & 3rd party credits

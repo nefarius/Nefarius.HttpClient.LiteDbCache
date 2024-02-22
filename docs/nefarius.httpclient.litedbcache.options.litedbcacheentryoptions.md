@@ -48,6 +48,18 @@ public bool CacheErrors { get; set; }
 
 [Boolean](https://docs.microsoft.com/en-us/dotnet/api/system.boolean)<br>
 
+### <a id="properties-cacheresponseheaders"/>**CacheResponseHeaders**
+
+Gets or sets whether the response headers should be cached for each request in addition to the content.
+
+```csharp
+public bool CacheResponseHeaders { get; set; }
+```
+
+#### Property Value
+
+[Boolean](https://docs.microsoft.com/en-us/dotnet/api/system.boolean)<br>
+
 ### <a id="properties-slidingexpiration"/>**SlidingExpiration**
 
 Gets or sets how long a cache entry can be inactive (e.g. not accessed) before it will be removed.
