@@ -50,10 +50,9 @@ internal sealed class CachedHttpResponseMessage
     public HttpStatusCode StatusCode { get; set; }
 
     /// <summary>
-    ///     Binary blob of response content.
+    ///     ID of the content file in FileStore, if any.
     /// </summary>
-    [Obsolete]
-    public byte[]? Content { get; set; }
+    public string? ContentFileId { get; set; }
 
     /// <summary>
     ///     Timestamp of entry creation.

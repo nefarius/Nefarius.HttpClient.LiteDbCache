@@ -27,6 +27,8 @@ internal sealed class LiteDbCacheHandler(
     LiteDbCacheDatabaseInstances instances)
     : DelegatingHandler
 {
+    private const string ContentFileName = "content.bin";
+
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
@@ -57,6 +59,7 @@ internal sealed class LiteDbCacheHandler(
         }
 
         LiteDatabase db = instances.GetOrCreateDatabase(instanceName);
+        ILiteStorage<string> fs = db.FileStorage;
 
         ILiteCollection<CachedHttpResponseMessage> col =
             db.GetCollection<CachedHttpResponseMessage>(instanceOptions.CollectionName);
@@ -118,10 +121,16 @@ internal sealed class LiteDbCacheHandler(
             // deserialize cached response
             HttpResponseMessage cachedResponse = request.CreateResponse(cacheEntry.StatusCode);
 
-            // might not have been cached
-            if (cacheEntry.Content is not null)
+            // we should have a body...
+            if (!string.IsNullOrEmpty(cacheEntry.ContentFileId))
             {
-                cachedResponse.Content = new ByteArrayContent(cacheEntry.Content);
+                LiteFileInfo<string> file = fs.FindById(cacheEntry.ContentFileId);
+
+                // ...we indeed have a cached file!
+                if (file is not null)
+                {
+                    cachedResponse.Content = new StreamContent(file.OpenRead());
+                }
             }
 
             // clone headers (might be empty)
@@ -174,7 +183,9 @@ internal sealed class LiteDbCacheHandler(
         // omit content, if configured
         if (entryOptions.CacheResponseContent)
         {
-            cacheEntry.Content = responseMs.ToArray();
+            responseMs.Position = 0;
+            LiteFileInfo<string> file = fs.Upload(requestKey, ContentFileName, responseMs);
+            cacheEntry.ContentFileId = file.Id;
         }
 
         col.Insert(cacheEntry);
@@ -183,7 +194,7 @@ internal sealed class LiteDbCacheHandler(
 
         // rewind and replace original stream
         responseMs.Position = 0;
-        response.Content = new ByteArrayContent(responseMs.ToArray());
+        response.Content = new StreamContent(responseMs);
 
         return response;
     }
