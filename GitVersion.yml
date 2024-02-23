@@ -1,7 +1,6 @@
-assembly-versioning-scheme: Major
-assembly-file-versioning-scheme: MajorMinorPatchTag
-mode: ContinuousDelivery
-tag-prefix: '[vV]'
-branches: {}
-ignore:
-  sha: []
+mode: Mainline
+branches:
+  master:
+    mode: ContinuousDeployment
+    tag:
+      tag: ''
