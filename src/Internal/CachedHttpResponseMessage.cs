@@ -1,4 +1,5 @@
 ﻿#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -17,6 +18,11 @@ namespace Nefarius.HttpClient.LiteDbCache.Internal;
 internal sealed class CachedHttpResponseMessage
 {
     /// <summary>
+    ///     The current schema version. Increment when <see cref="CachedHttpResponseMessage" /> changes.
+    /// </summary>
+    public const int CurrentSchemaVersion = 1;
+
+    /// <summary>
     ///     Database primary key.
     /// </summary>
     [BsonId]
@@ -27,6 +33,11 @@ internal sealed class CachedHttpResponseMessage
     ///     The key (SHA256 hash) to match against.
     /// </summary>
     public string Key { get; set; } = null!;
+
+    /// <summary>
+    ///     The version of the <see cref="CachedHttpResponseMessage" /> schema.
+    /// </summary>
+    public int SchemaVersion { get; set; } = 0;
 
     /// <summary>
     ///     Response HTTP headers.
@@ -41,6 +52,7 @@ internal sealed class CachedHttpResponseMessage
     /// <summary>
     ///     Binary blob of response content.
     /// </summary>
+    [Obsolete]
     public byte[]? Content { get; set; }
 
     /// <summary>

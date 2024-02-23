@@ -71,6 +71,15 @@ internal sealed class LiteDbCacheHandler(
         {
             logger.LogDebug("Cached entry found for {@Request}", request);
 
+            // make sure the fetched entry can be deserialized properly (might cause issues on major version upgrades)
+            if (cacheEntry.SchemaVersion != CachedHttpResponseMessage.CurrentSchemaVersion)
+            {
+                logger.LogDebug("Schema version {EntrySchema} differs from {CurrentSchema}, invalidating entry",
+                    cacheEntry.SchemaVersion, CachedHttpResponseMessage.CurrentSchemaVersion);
+                col.Delete(cacheEntry.Id);
+                goto fetch;
+            }
+
             // absolute lifetime expired
             if (entryOptions.AbsoluteExpiration is not null &&
                 entryOptions.AbsoluteExpiration <= DateTimeOffset.UtcNow)
@@ -149,7 +158,12 @@ internal sealed class LiteDbCacheHandler(
         await response.Content.CopyToAsync(responseMs, cancellationToken);
 
         // copy response to cache-able item
-        cacheEntry = new CachedHttpResponseMessage { Key = requestKey, StatusCode = response.StatusCode };
+        cacheEntry = new CachedHttpResponseMessage
+        {
+            Key = requestKey,
+            SchemaVersion = CachedHttpResponseMessage.CurrentSchemaVersion,
+            StatusCode = response.StatusCode
+        };
 
         // clone headers only if desired
         if (entryOptions.CacheResponseHeaders)
