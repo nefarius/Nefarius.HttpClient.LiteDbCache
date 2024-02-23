@@ -23,5 +23,5 @@ public sealed class LiteDbCacheDatabaseOptions
     /// <summary>
     ///     The parameters that apply to each cache entries' expiration strategy etc.
     /// </summary>
-    public LiteDbCacheEntryOptions EntryOptions { get; set; } = new();
+    public LiteDbCacheEntryOptions EntryOptions { get; init; } = new();
 }
