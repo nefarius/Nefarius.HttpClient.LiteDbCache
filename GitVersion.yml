@@ -3,4 +3,6 @@ branches:
   master:
     mode: ContinuousDeployment
     tag:
-      tag: ''
+      tag: '*-pre'
+      isPreRelease: true
+      regex: '^v(?<version>\d+\.\d+\.\d+)-pre$'
