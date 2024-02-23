@@ -18,14 +18,14 @@ public sealed class LiteDbCacheEntryOptions
     /// <summary>
     ///     Gets or sets an absolute expiration date for the cache entry.
     /// </summary>
-    public DateTimeOffset? AbsoluteExpiration { get; set; }
+    public DateTimeOffset? AbsoluteExpiration { internal get; set; }
 
     /// <summary>
     ///     Gets or sets an absolute expiration time, relative to now.
     /// </summary>
     public TimeSpan? AbsoluteExpirationRelativeToNow
     {
-        get => _absoluteExpirationRelativeToNow;
+        internal get => _absoluteExpirationRelativeToNow;
         set
         {
             if (value <= TimeSpan.Zero)
@@ -46,7 +46,7 @@ public sealed class LiteDbCacheEntryOptions
     /// </summary>
     public TimeSpan? SlidingExpiration
     {
-        get => _slidingExpiration;
+        internal get => _slidingExpiration;
         set
         {
             if (value <= TimeSpan.Zero)
@@ -65,22 +65,22 @@ public sealed class LiteDbCacheEntryOptions
     ///     Gets or sets whether a non-success HTTP response should also be added to the cache.
     /// </summary>
     /// <remarks>Disabled by default.</remarks>
-    public bool CacheErrors { get; set; } = false;
+    public bool CacheErrors { internal get; set; } = false;
 
     /// <summary>
     ///     Gets or sets a regular expression of URIs to exclude from caching.
     /// </summary>
-    public Regex? UriExclusionRegex { get; set; }
+    public Regex? UriExclusionRegex { internal get; set; }
 
     /// <summary>
     ///     Gets or sets whether the response headers should be cached for each request in addition to the content.
     /// </summary>
     /// <remarks>Enabled by default.</remarks>
-    public bool CacheResponseHeaders { get; set; } = true;
+    public bool CacheResponseHeaders { internal get; set; } = true;
 
     /// <summary>
     ///     Gets or sets whether the response content (body) should be cached.
     /// </summary>
     /// <remarks>Enabled by default.</remarks>
-    public bool CacheResponseContent { get; set; } = true;
+    public bool CacheResponseContent { internal get; set; } = true;
 }

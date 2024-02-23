@@ -1,4 +1,5 @@
 ﻿#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -17,6 +18,11 @@ namespace Nefarius.HttpClient.LiteDbCache.Internal;
 internal sealed class CachedHttpResponseMessage
 {
     /// <summary>
+    ///     The current schema version. Increment when <see cref="CachedHttpResponseMessage" /> changes.
+    /// </summary>
+    public const int CurrentSchemaVersion = 1;
+
+    /// <summary>
     ///     Database primary key.
     /// </summary>
     [BsonId]
@@ -29,6 +35,11 @@ internal sealed class CachedHttpResponseMessage
     public string Key { get; set; } = null!;
 
     /// <summary>
+    ///     The version of the <see cref="CachedHttpResponseMessage" /> schema.
+    /// </summary>
+    public int SchemaVersion { get; set; } = 0;
+
+    /// <summary>
     ///     Response HTTP headers.
     /// </summary>
     public Dictionary<string, List<string>> Headers { get; set; } = new();
@@ -39,9 +50,9 @@ internal sealed class CachedHttpResponseMessage
     public HttpStatusCode StatusCode { get; set; }
 
     /// <summary>
-    ///     Binary blob of response content.
+    ///     ID of the content file in FileStore, if any.
     /// </summary>
-    public byte[]? Content { get; set; }
+    public string? ContentFileId { get; set; }
 
     /// <summary>
     ///     Timestamp of entry creation.
