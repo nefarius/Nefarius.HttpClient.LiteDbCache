@@ -44,6 +44,28 @@ internal sealed class LiteDbCacheDatabaseInstances(IServiceProvider sp)
         col.DeleteAll();
     }
 
+    /// <inheritdoc />
+    public void Delete(string name, ObjectId id)
+    {
+        if (!TryGetValue(name, out LiteDatabase db))
+        {
+            return;
+        }
+
+        // an IOptionsSnapshot is scoped
+        using IServiceScope scope = sp.CreateScope();
+
+        IOptionsSnapshot<DatabaseInstanceOptions> options =
+            scope.ServiceProvider.GetRequiredService<IOptionsSnapshot<DatabaseInstanceOptions>>();
+
+        DatabaseInstanceOptions instance = options.Get(name);
+
+        ILiteCollection<CachedHttpResponseMessage> col =
+            db.GetCollection<CachedHttpResponseMessage>(instance.CollectionName);
+
+        col.Delete(id);
+    }
+
     /// <summary>
     ///     Gets (or creates) a <see cref="LiteDatabase" /> instance for a given name.
     /// </summary>

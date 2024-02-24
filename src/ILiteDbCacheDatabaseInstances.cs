@@ -23,4 +23,11 @@ public interface ILiteDbCacheDatabaseInstances
     /// </summary>
     /// <param name="name">The client/instance name.</param>
     void Purge(string name);
+
+    /// <summary>
+    ///     Deletes a cached entry in the given instance
+    /// </summary>
+    /// <param name="name">The client/instance name.</param>
+    /// <param name="id">The <see cref="ObjectId"/> of the database record.</param>
+    void Delete(string name, ObjectId id);
 }

@@ -18,7 +18,7 @@ internal sealed class DemoService : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         // TODO: turn these into unit tests :P
-        
+
         LiteDatabase? db = _instances.GetDatabase("httpbin");
         // null expected
 
@@ -27,7 +27,7 @@ internal sealed class DemoService : BackgroundService
             .PostAsync("/post", new StringContent("key=value"), stoppingToken);
 
         string postBody = await postRet.Content.ReadAsStringAsync(stoppingToken);
-        
+
         db = _instances.GetDatabase("httpbin");
         // not null expected
 
@@ -40,5 +40,11 @@ internal sealed class DemoService : BackgroundService
             .GetAsync("/", stoppingToken);
 
         string? ip = await ipRet.Content.ReadAsStringAsync(stoppingToken);
+
+        if (ipRet.IsCached())
+        {
+            ObjectId? id = ipRet.GetCacheId();
+            _instances.Delete("ifconfig", id);
+        }
     }
 }
