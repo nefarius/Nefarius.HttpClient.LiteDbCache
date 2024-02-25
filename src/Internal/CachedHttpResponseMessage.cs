@@ -20,6 +20,7 @@ internal sealed class CachedHttpResponseMessage
     /// <summary>
     ///     The current schema version. Increment when <see cref="CachedHttpResponseMessage" /> changes.
     /// </summary>
+    /// <remarks>Increment whenever <see cref="CachedHttpResponseMessage"/> changes in an API-breaking fashion.</remarks>
     public const int CurrentSchemaVersion = 1;
 
     /// <summary>
