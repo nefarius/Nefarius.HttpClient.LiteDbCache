@@ -11,7 +11,7 @@ namespace Nefarius.HttpClient.LiteDbCache.Internal;
 /// <summary>
 ///     Holds the association if HTTP client name to database instance.
 /// </summary>
-internal sealed class LiteDbCacheDatabaseInstances(IServiceProvider sp)
+internal sealed class LiteDbCacheDatabaseInstances(IServiceScopeFactory scopeFactory)
     : Dictionary<string, LiteDatabase>, ILiteDbCacheDatabaseInstances
 {
     private readonly object _lock = new();
@@ -31,7 +31,7 @@ internal sealed class LiteDbCacheDatabaseInstances(IServiceProvider sp)
         }
 
         // an IOptionsSnapshot is scoped
-        using IServiceScope scope = sp.CreateScope();
+        using IServiceScope scope = scopeFactory.CreateScope();
 
         IOptionsSnapshot<DatabaseInstanceOptions> options =
             scope.ServiceProvider.GetRequiredService<IOptionsSnapshot<DatabaseInstanceOptions>>();
@@ -53,7 +53,7 @@ internal sealed class LiteDbCacheDatabaseInstances(IServiceProvider sp)
         }
 
         // an IOptionsSnapshot is scoped
-        using IServiceScope scope = sp.CreateScope();
+        using IServiceScope scope = scopeFactory.CreateScope();
 
         IOptionsSnapshot<DatabaseInstanceOptions> options =
             scope.ServiceProvider.GetRequiredService<IOptionsSnapshot<DatabaseInstanceOptions>>();
@@ -81,7 +81,7 @@ internal sealed class LiteDbCacheDatabaseInstances(IServiceProvider sp)
             }
 
             // an IOptionsSnapshot is scoped
-            using IServiceScope scope = sp.CreateScope();
+            using IServiceScope scope = scopeFactory.CreateScope();
 
             IOptionsSnapshot<DatabaseInstanceOptions> options =
                 scope.ServiceProvider.GetRequiredService<IOptionsSnapshot<DatabaseInstanceOptions>>();
