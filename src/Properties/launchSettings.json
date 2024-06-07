@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Nefarius.Utilities.AspNetCore": {
+    "Nefarius.HttpClient.LiteDbCache": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
