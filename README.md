@@ -1,6 +1,4 @@
-<img src="assets/NSS-128x128.png" align="right" />
-
-# Nefarius.HttpClient.LiteDbCache
+# <img src="assets/NSS-128x128.png" align="left" />Nefarius.HttpClient.LiteDbCache
 
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nefarius/Nefarius.HttpClient.LiteDbCache/build.yml) ![Requirements](https://img.shields.io/badge/Requires-.NET%20%3E%3D6.0-blue.svg) [![Nuget](https://img.shields.io/nuget/v/Nefarius.HttpClient.LiteDbCache)](https://www.nuget.org/packages/Nefarius.HttpClient.LiteDbCache/) ![Nuget](https://img.shields.io/nuget/dt/Nefarius.HttpClient.LiteDbCache)
 
