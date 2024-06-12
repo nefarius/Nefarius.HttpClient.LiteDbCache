@@ -47,7 +47,7 @@ internal sealed class LiteDbCacheHandler(
             entryOptions = entryOpts;
         }
 
-        // check for exclusion
+        // check for URI exclusion
         if (entryOptions.UriExclusionRegex is not null &&
             request.RequestUri is not null &&
             entryOptions.UriExclusionRegex.IsMatch(request.RequestUri.ToString()))
