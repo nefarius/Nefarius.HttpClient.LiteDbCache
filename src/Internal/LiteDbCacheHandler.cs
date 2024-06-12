@@ -79,6 +79,11 @@ internal sealed class LiteDbCacheHandler(
             {
                 logger.LogDebug("Schema version {EntrySchema} differs from {CurrentSchema}, invalidating entry",
                     cacheEntry.SchemaVersion, CachedHttpResponseMessage.CurrentSchemaVersion);
+                if (!string.IsNullOrEmpty(cacheEntry.ContentFileId))
+                {
+                    fs.Delete(cacheEntry.ContentFileId);
+                }
+
                 col.Delete(cacheEntry.Id);
                 goto fetch;
             }
@@ -89,6 +94,11 @@ internal sealed class LiteDbCacheHandler(
             {
                 logger.LogDebug("Request content type {ContentType} excluded for {CacheEntry}",
                     cacheEntry.ContentType, cacheEntry);
+                if (!string.IsNullOrEmpty(cacheEntry.ContentFileId))
+                {
+                    fs.Delete(cacheEntry.ContentFileId);
+                }
+
                 col.Delete(cacheEntry.Id);
                 goto fetch;
             }
@@ -99,6 +109,11 @@ internal sealed class LiteDbCacheHandler(
             {
                 logger.LogDebug("Absolute lifetime {AbsoluteExpiration} expired for {CacheEntry}",
                     entryOptions.AbsoluteExpiration, cacheEntry);
+                if (!string.IsNullOrEmpty(cacheEntry.ContentFileId))
+                {
+                    fs.Delete(cacheEntry.ContentFileId);
+                }
+
                 col.Delete(cacheEntry.Id);
                 goto fetch;
             }
@@ -109,6 +124,11 @@ internal sealed class LiteDbCacheHandler(
             {
                 logger.LogDebug("Absolute lifetime period {AbsoluteExpirationRelativeToNow} expired for {CacheEntry}",
                     entryOptions.AbsoluteExpirationRelativeToNow, cacheEntry);
+                if (!string.IsNullOrEmpty(cacheEntry.ContentFileId))
+                {
+                    fs.Delete(cacheEntry.ContentFileId);
+                }
+
                 col.Delete(cacheEntry.Id);
                 goto fetch;
             }
@@ -120,6 +140,11 @@ internal sealed class LiteDbCacheHandler(
             {
                 logger.LogDebug("Sliding lifetime period {SlidingExpiration} expired for {CacheEntry}",
                     entryOptions.SlidingExpiration, cacheEntry);
+                if (!string.IsNullOrEmpty(cacheEntry.ContentFileId))
+                {
+                    fs.Delete(cacheEntry.ContentFileId);
+                }
+
                 col.Delete(cacheEntry.Id);
                 goto fetch;
             }
