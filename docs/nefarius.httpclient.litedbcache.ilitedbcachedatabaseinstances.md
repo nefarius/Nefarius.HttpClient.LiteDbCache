@@ -10,6 +10,22 @@ public interface ILiteDbCacheDatabaseInstances
 
 ## Methods
 
+### <a id="methods-delete"/>**Delete(String, ObjectId)**
+
+Deletes a cached entry in the given instance
+
+```csharp
+void Delete(string name, ObjectId id)
+```
+
+#### Parameters
+
+`name` [String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
+The client/instance name.
+
+`id` ObjectId<br>
+The  of the database record.
+
 ### <a id="methods-getdatabase"/>**GetDatabase(String)**
 
 Gets a  instance for a given name.

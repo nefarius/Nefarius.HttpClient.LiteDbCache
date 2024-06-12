@@ -93,7 +93,7 @@ management methods (cache purge and alike).
 ```PowerShell
 dotnet tool install --global Nefarius.Tools.XMLDoc2Markdown
 dotnet publish -c Release -f net7.0 .\src\Nefarius.HttpClient.LiteDbCache.csproj
-xmldoc2md .\bin\net7.0\publish\Nefarius.HttpClient.LiteDbCache.dll .\docs\
+xmldoc2md .\src\bin\net7.0\publish\Nefarius.HttpClient.LiteDbCache.dll .\docs\
 ```
 
 ## Sources & 3rd party credits
