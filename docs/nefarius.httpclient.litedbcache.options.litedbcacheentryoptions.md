@@ -120,11 +120,3 @@ public Regex UriExclusionRegex { internal get; set; }
 #### Property Value
 
 Regex<br>
-
-## Constructors
-
-### <a id="constructors-.ctor"/>**LiteDbCacheEntryOptions()**
-
-```csharp
-public LiteDbCacheEntryOptions()
-```

@@ -16,6 +16,7 @@ public sealed class LiteDbCacheEntryOptions
 {
     private TimeSpan? _absoluteExpirationRelativeToNow;
     private TimeSpan? _slidingExpiration;
+    internal LiteDbCacheEntryOptions() { }
 
     /// <summary>
     ///     Gets or sets an absolute expiration date for the cache entry.

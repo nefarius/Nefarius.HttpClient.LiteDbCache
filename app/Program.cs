@@ -21,7 +21,7 @@ builder.Services.AddHttpClient("ifconfig", cfg =>
     options.CollectionName = "cache";
     options.EntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
     
-    //options.EntryOptions.ExcludedContentTypes.Add("text/plain");
+    options.EntryOptions.ExcludedContentTypes.Add("text/plain");
 });
 
 builder.Services.AddHttpClient("httpbin", cfg =>
