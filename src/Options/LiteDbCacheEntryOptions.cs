@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
@@ -10,6 +11,7 @@ namespace Nefarius.HttpClient.LiteDbCache.Options;
 /// </summary>
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
 [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
+[SuppressMessage("ReSharper", "CollectionNeverUpdated.Global")]
 public sealed class LiteDbCacheEntryOptions
 {
     private TimeSpan? _absoluteExpirationRelativeToNow;
@@ -71,6 +73,11 @@ public sealed class LiteDbCacheEntryOptions
     ///     Gets or sets a regular expression of URIs to exclude from caching.
     /// </summary>
     public Regex? UriExclusionRegex { internal get; set; }
+
+    /// <summary>
+    ///     Collection of content types that should never be pulled from cache (e.g. application/octet-stream).
+    /// </summary>
+    public List<string> ExcludedContentTypes { get; internal init; } = new();
 
     /// <summary>
     ///     Gets or sets whether the response headers should be cached for each request in addition to the content.

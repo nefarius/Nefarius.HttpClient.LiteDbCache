@@ -21,7 +21,7 @@ internal sealed class CachedHttpResponseMessage
     ///     The current schema version. Increment when <see cref="CachedHttpResponseMessage" /> changes.
     /// </summary>
     /// <remarks>Increment whenever <see cref="CachedHttpResponseMessage"/> changes in an API-breaking fashion.</remarks>
-    public const int CurrentSchemaVersion = 1;
+    public const int CurrentSchemaVersion = 2;
 
     /// <summary>
     ///     Database primary key.
@@ -64,6 +64,11 @@ internal sealed class CachedHttpResponseMessage
     ///     Timestamp of last access.
     /// </summary>
     public DateTimeOffset? LastAccessedAt { get; set; }
+
+    /// <summary>
+    ///     The response content type.
+    /// </summary>
+    public string? ContentType { get; set; }
 
     public override string ToString()
     {

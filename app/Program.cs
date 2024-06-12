@@ -20,6 +20,8 @@ builder.Services.AddHttpClient("ifconfig", cfg =>
     options.ConnectionString = dbPath;
     options.CollectionName = "cache";
     options.EntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
+    
+    //options.EntryOptions.ExcludedContentTypes.Add("text/plain");
 });
 
 builder.Services.AddHttpClient("httpbin", cfg =>

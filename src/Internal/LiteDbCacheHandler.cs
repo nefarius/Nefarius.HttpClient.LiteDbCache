@@ -83,6 +83,16 @@ internal sealed class LiteDbCacheHandler(
                 goto fetch;
             }
 
+            // we get the content type only after the last request was cached, if in exclusion, ignore and fetch again
+            if (entryOptions.ExcludedContentTypes.Any(x =>
+                    x.Equals(cacheEntry.ContentType, StringComparison.OrdinalIgnoreCase)))
+            {
+                logger.LogDebug("Request content type {ContentType} excluded for {CacheEntry}",
+                    cacheEntry.ContentType, cacheEntry);
+                col.Delete(cacheEntry.Id);
+                goto fetch;
+            }
+
             // absolute lifetime expired
             if (entryOptions.AbsoluteExpiration is not null &&
                 entryOptions.AbsoluteExpiration <= DateTimeOffset.UtcNow)
@@ -171,7 +181,8 @@ internal sealed class LiteDbCacheHandler(
         {
             Key = requestKey,
             SchemaVersion = CachedHttpResponseMessage.CurrentSchemaVersion,
-            StatusCode = response.StatusCode
+            StatusCode = response.StatusCode,
+            ContentType = response.Content.Headers.ContentType?.ToString()
         };
 
         // clone headers only if desired
