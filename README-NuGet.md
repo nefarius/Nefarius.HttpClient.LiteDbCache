@@ -75,6 +75,25 @@ string? publicIP = await result.Content.ReadAsStringAsync(ct);
 If a cached entry exists, the response (headers, body content etc.) will be pulled and returned from the local database
 and no remote web request will be issued until the cache entry expires.
 
+## Advanced usage
+
+### Cache database access
+
+Inject the `ILiteDbCacheDatabaseInstances` interface to get access to the `LiteDatabase` instances and other database
+management methods (cache purge and alike).
+
+## Documentation
+
+[Link to API docs](docs/index.md).
+
+### Generating documentation
+
+```PowerShell
+dotnet tool install --global Nefarius.Tools.XMLDoc2Markdown
+dotnet publish -c Release -f net7.0 .\src\Nefarius.HttpClient.LiteDbCache.csproj
+xmldoc2md .\src\bin\net7.0\publish\Nefarius.HttpClient.LiteDbCache.dll .\docs\
+```
+
 ## Sources & 3rd party credits
 
 This library benefits from these awesome projects ❤ (appearance in no special order):
