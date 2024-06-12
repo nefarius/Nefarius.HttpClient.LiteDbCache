@@ -38,6 +38,7 @@ capabilities 😉
   and similar) are technically possible; however due to how the `HttpClient` class is structured would require writing a
   ton of wrapper methods that supply these options to each `HttpRequestMessage` (which can not be conveniently
   overwritten); a task I am currently not fond of since it's a low priority anyway.
+  - A great task for Source Generators!
 - The upstream `Cache-Control` header is currently completely ignored; it could be taken into consideration, if the user
   configured it to be honored.
 - Add some unit tests... maybe. Someday. 😅
