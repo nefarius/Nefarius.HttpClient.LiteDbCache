@@ -23,7 +23,7 @@ The goal of the cache is to survive application/service restarts.
 This library is aimed at end-user clients where you wish to drag in as little dependency on 3rd party services as
 possible. An embedded database sitting in some folder does the trick there perfectly. It's usually not the brightest
 idea to require spinning up a Redis or MongoDB instance on a client's machine just to get some basic persisted storage
-capabilities 😉
+ capabilities. 😉
 
 ## Features
 
@@ -93,8 +93,8 @@ management methods (cache purge and alike).
 
 ```PowerShell
 dotnet tool install --global Nefarius.Tools.XMLDoc2Markdown
-dotnet publish -c Release -f net7.0 .\src\Nefarius.HttpClient.LiteDbCache.csproj
-xmldoc2md .\src\bin\net7.0\publish\Nefarius.HttpClient.LiteDbCache.dll .\docs\
+dotnet publish -c Release -f net9.0 .\src\Nefarius.HttpClient.LiteDbCache.csproj
+xmldoc2md .\src\bin\net9.0\publish\Nefarius.HttpClient.LiteDbCache.dll .\docs\
 ```
 
 ## Sources & 3rd party credits
