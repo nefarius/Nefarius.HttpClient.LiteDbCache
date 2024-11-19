@@ -44,7 +44,7 @@ internal sealed class DemoService : BackgroundService
         if (ipRet.IsCached())
         {
             ObjectId? id = ipRet.GetCacheId();
-            _instances.Delete("ifconfig", id);
+            _instances.Delete("ifconfig", id!);
         }
     }
 }
