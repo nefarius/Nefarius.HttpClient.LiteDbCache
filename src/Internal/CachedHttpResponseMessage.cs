@@ -28,7 +28,7 @@ internal sealed class CachedHttpResponseMessage
     /// </summary>
     [BsonId]
     [SuppressMessage("ReSharper", "UnusedMember.Global")]
-    public ObjectId Id { get; set; } = null!;
+    public ObjectId Id { get; set; } = ObjectId.NewObjectId();
 
     /// <summary>
     ///     The key (SHA256 hash) to match against.
