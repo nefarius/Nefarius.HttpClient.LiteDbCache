@@ -15,7 +15,7 @@ public interface ILiteDbCacheDatabaseInstances
 Deletes a cached entry in the given instance
 
 ```csharp
-void Delete(string name, ObjectId id)
+bool Delete(string name, ObjectId id)
 ```
 
 #### Parameters
@@ -25,6 +25,10 @@ The client/instance name.
 
 `id` ObjectId<br>
 The  of the database record.
+
+#### Returns
+
+Whether the delete succeeded.
 
 ### <a id="methods-getdatabase"/>**GetDatabase(String)**
 
@@ -48,10 +52,14 @@ The  object or null if not found.
 Purges all cached entries for the given instance.
 
 ```csharp
-void Purge(string name)
+int Purge(string name)
 ```
 
 #### Parameters
 
 `name` [String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
 The client/instance name.
+
+#### Returns
+
+The number of deleted entries.
