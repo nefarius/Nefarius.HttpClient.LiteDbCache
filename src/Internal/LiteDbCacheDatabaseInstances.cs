@@ -23,11 +23,11 @@ internal sealed class LiteDbCacheDatabaseInstances(IServiceScopeFactory scopeFac
     }
 
     /// <inheritdoc />
-    public void Purge(string name)
+    public int Purge(string name)
     {
         if (!TryGetValue(name, out LiteDatabase db))
         {
-            return;
+            return 0;
         }
 
         // an IOptionsSnapshot is scoped
@@ -41,15 +41,15 @@ internal sealed class LiteDbCacheDatabaseInstances(IServiceScopeFactory scopeFac
         ILiteCollection<CachedHttpResponseMessage> col =
             db.GetCollection<CachedHttpResponseMessage>(instance.CollectionName);
 
-        col.DeleteAll();
+        return col.DeleteAll();
     }
 
     /// <inheritdoc />
-    public void Delete(string name, ObjectId id)
+    public bool Delete(string name, ObjectId id)
     {
         if (!TryGetValue(name, out LiteDatabase db))
         {
-            return;
+            return false;
         }
 
         // an IOptionsSnapshot is scoped
@@ -63,7 +63,7 @@ internal sealed class LiteDbCacheDatabaseInstances(IServiceScopeFactory scopeFac
         ILiteCollection<CachedHttpResponseMessage> col =
             db.GetCollection<CachedHttpResponseMessage>(instance.CollectionName);
 
-        col.Delete(id);
+        return col.Delete(id);
     }
 
     /// <summary>

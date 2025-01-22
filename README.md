@@ -1,6 +1,9 @@
 # <img src="assets/NSS-128x128.png" align="left" />Nefarius.HttpClient.LiteDbCache
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nefarius/Nefarius.HttpClient.LiteDbCache/build.yml) ![Requirements](https://img.shields.io/badge/Requires-.NET%20%3E%3D6.0-blue.svg) [![Nuget](https://img.shields.io/nuget/v/Nefarius.HttpClient.LiteDbCache)](https://www.nuget.org/packages/Nefarius.HttpClient.LiteDbCache/) ![Nuget](https://img.shields.io/nuget/dt/Nefarius.HttpClient.LiteDbCache)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nefarius/Nefarius.HttpClient.LiteDbCache/build.yml)
+![Requirements](https://img.shields.io/badge/Requires-.NET%20%3E%3D6.0-blue.svg)
+[![Nuget](https://img.shields.io/nuget/v/Nefarius.HttpClient.LiteDbCache)](https://www.nuget.org/packages/Nefarius.HttpClient.LiteDbCache/)
+![Nuget](https://img.shields.io/nuget/dt/Nefarius.HttpClient.LiteDbCache)
 
 Adds disk-based response caching to HttpClient named instances using LiteDB.
 
@@ -23,7 +26,7 @@ The goal of the cache is to survive application/service restarts.
 This library is aimed at end-user clients where you wish to drag in as little dependency on 3rd party services as
 possible. An embedded database sitting in some folder does the trick there perfectly. It's usually not the brightest
 idea to require spinning up a Redis or MongoDB instance on a client's machine just to get some basic persisted storage
- capabilities. 😉
+capabilities. 😉
 
 ## Features
 
@@ -34,11 +37,12 @@ idea to require spinning up a Redis or MongoDB instance on a client's machine ju
 ## Some ideas
 
 - Per-request cache entry expiration options (
-  like [`MemoryCacheEntryOptions`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.memory.memorycacheentryoptions)
+  like [
+  `MemoryCacheEntryOptions`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.memory.memorycacheentryoptions)
   and similar) are technically possible; however due to how the `HttpClient` class is structured would require writing a
   ton of wrapper methods that supply these options to each `HttpRequestMessage` (which can not be conveniently
   overwritten); a task I am currently not fond of since it's a low priority anyway.
-  - A great task for Source Generators!
+    - A great task for Source Generators!
 - The upstream `Cache-Control` header is currently completely ignored; it could be taken into consideration, if the user
   configured it to be honored.
 - Add some unit tests... maybe. Someday. 😅
@@ -88,15 +92,7 @@ management methods (cache purge and alike).
 ## Documentation
 
 [Link to API docs](docs/index.md).
-
-### Generating documentation
-
-```PowerShell
-dotnet tool install --global Nefarius.Tools.XMLDoc2Markdown
-dotnet publish -c Release -f net9.0 .\src\Nefarius.HttpClient.LiteDbCache.csproj
-xmldoc2md .\src\bin\net9.0\publish\Nefarius.HttpClient.LiteDbCache.dll .\docs\
-```
-
+s
 ## Sources & 3rd party credits
 
 This library benefits from these awesome projects ❤ (appearance in no special order):
