@@ -92,7 +92,7 @@ management methods (cache purge and alike).
 ## Documentation
 
 [Link to API docs](docs/index.md).
-s
+
 ## Sources & 3rd party credits
 
 This library benefits from these awesome projects ❤ (appearance in no special order):
