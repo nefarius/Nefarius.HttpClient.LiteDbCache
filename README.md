@@ -36,9 +36,8 @@ capabilities. 😉
 
 ## Some ideas
 
-- Per-request cache entry expiration options (
-  like [
-  `MemoryCacheEntryOptions`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.memory.memorycacheentryoptions)
+- Per-request cache entry expiration options
+  (like [`MemoryCacheEntryOptions`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.memory.memorycacheentryoptions)
   and similar) are technically possible; however due to how the `HttpClient` class is structured would require writing a
   ton of wrapper methods that supply these options to each `HttpRequestMessage` (which can not be conveniently
   overwritten); a task I am currently not fond of since it's a low priority anyway.
