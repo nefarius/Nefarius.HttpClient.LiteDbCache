@@ -8,6 +8,8 @@ Grants access to the underlying cache database instances.
 public interface ILiteDbCacheDatabaseInstances
 ```
 
+Attributes [NullableContextAttribute](https://learn.microsoft.com/dotnet/api/system.runtime.compilerservices.nullablecontextattribute)
+
 ## Methods
 
 ### <a id="methods-delete"/>**Delete(String, ObjectId)**
@@ -20,11 +22,11 @@ bool Delete(string name, ObjectId id)
 
 #### Parameters
 
-`name` [String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
+`name` [String](https://learn.microsoft.com/dotnet/api/system.string)<br>
 The client/instance name.
 
 `id` ObjectId<br>
-The  of the database record.
+The ObjectId of the database record.
 
 #### Returns
 
@@ -32,7 +34,7 @@ Whether the delete succeeded.
 
 ### <a id="methods-getdatabase"/>**GetDatabase(String)**
 
-Gets a  instance for a given name.
+Gets a LiteDatabase instance for a given name.
 
 ```csharp
 LiteDatabase GetDatabase(string name)
@@ -40,12 +42,12 @@ LiteDatabase GetDatabase(string name)
 
 #### Parameters
 
-`name` [String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
+`name` [String](https://learn.microsoft.com/dotnet/api/system.string)<br>
 The client/instance name.
 
 #### Returns
 
-The  object or null if not found.
+The LiteDatabase object or null if not found.
 
 ### <a id="methods-purge"/>**Purge(String)**
 
@@ -57,7 +59,7 @@ int Purge(string name)
 
 #### Parameters
 
-`name` [String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
+`name` [String](https://learn.microsoft.com/dotnet/api/system.string)<br>
 The client/instance name.
 
 #### Returns

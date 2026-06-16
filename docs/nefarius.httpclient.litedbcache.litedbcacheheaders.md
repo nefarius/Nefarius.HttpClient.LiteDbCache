@@ -8,7 +8,7 @@ Cached response additional headers.
 public static class LiteDbCacheHeaders
 ```
 
-Inheritance [Object](https://docs.microsoft.com/en-us/dotnet/api/system.object) → [LiteDbCacheHeaders](./nefarius.httpclient.litedbcache.litedbcacheheaders.md)
+Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [LiteDbCacheHeaders](./nefarius.httpclient.litedbcache.litedbcacheheaders.md)
 
 ## Fields
 

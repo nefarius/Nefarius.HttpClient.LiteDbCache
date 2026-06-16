@@ -2,19 +2,19 @@
 
 Namespace: Nefarius.HttpClient.LiteDbCache.Options
 
-Configuration properties for a  instance to use for request caching.
+Configuration properties for a LiteDB instance to use for request caching.
 
 ```csharp
 public sealed class LiteDbCacheDatabaseOptions
 ```
 
-Inheritance [Object](https://docs.microsoft.com/en-us/dotnet/api/system.object) → [LiteDbCacheDatabaseOptions](./nefarius.httpclient.litedbcache.options.litedbcachedatabaseoptions.md)
+Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [LiteDbCacheDatabaseOptions](./nefarius.httpclient.litedbcache.options.litedbcachedatabaseoptions.md)
 
 ## Properties
 
 ### <a id="properties-collectionname"/>**CollectionName**
 
-The  collection name.
+The LiteDB collection name.
 
 ```csharp
 public string CollectionName { get; set; }
@@ -22,11 +22,11 @@ public string CollectionName { get; set; }
 
 #### Property Value
 
-[String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
+[String](https://learn.microsoft.com/dotnet/api/system.string)<br>
 
 ### <a id="properties-connectionstring"/>**ConnectionString**
 
-The  connection string.
+The LiteDB connection string.
 
 ```csharp
 public string ConnectionString { get; set; }
@@ -34,7 +34,7 @@ public string ConnectionString { get; set; }
 
 #### Property Value
 
-[String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
+[String](https://learn.microsoft.com/dotnet/api/system.string)<br>
 
 **Remarks:**
 

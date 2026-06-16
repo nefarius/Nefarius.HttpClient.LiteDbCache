@@ -2,13 +2,13 @@
 
 Namespace: Nefarius.HttpClient.LiteDbCache.Options
 
-Cache-specific options for .
+Cache-specific options for [HttpRequestMessage](https://learn.microsoft.com/dotnet/api/system.net.http.httprequestmessage).
 
 ```csharp
 public static class LiteDbCacheHttpRequestOptions
 ```
 
-Inheritance [Object](https://docs.microsoft.com/en-us/dotnet/api/system.object) → [LiteDbCacheHttpRequestOptions](./nefarius.httpclient.litedbcache.options.litedbcachehttprequestoptions.md)
+Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [LiteDbCacheHttpRequestOptions](./nefarius.httpclient.litedbcache.options.litedbcachehttprequestoptions.md)
 
 ## Fields
 

@@ -8,7 +8,8 @@ Provides the cache options for an entry in a LiteDb cache instance.
 public sealed class LiteDbCacheEntryOptions
 ```
 
-Inheritance [Object](https://docs.microsoft.com/en-us/dotnet/api/system.object) → [LiteDbCacheEntryOptions](./nefarius.httpclient.litedbcache.options.litedbcacheentryoptions.md)
+Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [LiteDbCacheEntryOptions](./nefarius.httpclient.litedbcache.options.litedbcacheentryoptions.md)<br>
+Attributes [NullableContextAttribute](https://learn.microsoft.com/dotnet/api/system.runtime.compilerservices.nullablecontextattribute), [NullableAttribute](https://learn.microsoft.com/dotnet/api/system.runtime.compilerservices.nullableattribute)
 
 ## Properties
 
@@ -22,7 +23,7 @@ public Nullable<DateTimeOffset> AbsoluteExpiration { internal get; set; }
 
 #### Property Value
 
-[Nullable&lt;DateTimeOffset&gt;](https://docs.microsoft.com/en-us/dotnet/api/system.nullable-1)<br>
+[Nullable](https://learn.microsoft.com/dotnet/api/system.nullable-1)<[DateTimeOffset](https://learn.microsoft.com/dotnet/api/system.datetimeoffset)><br>
 
 ### <a id="properties-absoluteexpirationrelativetonow"/>**AbsoluteExpirationRelativeToNow**
 
@@ -34,7 +35,7 @@ public Nullable<TimeSpan> AbsoluteExpirationRelativeToNow { internal get; set; }
 
 #### Property Value
 
-[Nullable&lt;TimeSpan&gt;](https://docs.microsoft.com/en-us/dotnet/api/system.nullable-1)<br>
+[Nullable](https://learn.microsoft.com/dotnet/api/system.nullable-1)<[TimeSpan](https://learn.microsoft.com/dotnet/api/system.timespan)><br>
 
 ### <a id="properties-cacheerrors"/>**CacheErrors**
 
@@ -46,7 +47,7 @@ public bool CacheErrors { internal get; set; }
 
 #### Property Value
 
-[Boolean](https://docs.microsoft.com/en-us/dotnet/api/system.boolean)<br>
+[Boolean](https://learn.microsoft.com/dotnet/api/system.boolean)<br>
 
 **Remarks:**
 
@@ -62,7 +63,7 @@ public bool CacheResponseContent { internal get; set; }
 
 #### Property Value
 
-[Boolean](https://docs.microsoft.com/en-us/dotnet/api/system.boolean)<br>
+[Boolean](https://learn.microsoft.com/dotnet/api/system.boolean)<br>
 
 **Remarks:**
 
@@ -78,7 +79,7 @@ public bool CacheResponseHeaders { internal get; set; }
 
 #### Property Value
 
-[Boolean](https://docs.microsoft.com/en-us/dotnet/api/system.boolean)<br>
+[Boolean](https://learn.microsoft.com/dotnet/api/system.boolean)<br>
 
 **Remarks:**
 
@@ -94,7 +95,7 @@ public List<String> ExcludedContentTypes { get; internal set; }
 
 #### Property Value
 
-[List&lt;String&gt;](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1)<br>
+[List](https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1)<[String](https://learn.microsoft.com/dotnet/api/system.string)><br>
 
 ### <a id="properties-slidingexpiration"/>**SlidingExpiration**
 
@@ -107,7 +108,7 @@ public Nullable<TimeSpan> SlidingExpiration { internal get; set; }
 
 #### Property Value
 
-[Nullable&lt;TimeSpan&gt;](https://docs.microsoft.com/en-us/dotnet/api/system.nullable-1)<br>
+[Nullable](https://learn.microsoft.com/dotnet/api/system.nullable-1)<[TimeSpan](https://learn.microsoft.com/dotnet/api/system.timespan)><br>
 
 ### <a id="properties-uriexclusionregex"/>**UriExclusionRegex**
 
@@ -119,4 +120,4 @@ public Regex UriExclusionRegex { internal get; set; }
 
 #### Property Value
 
-Regex<br>
+[Regex](https://learn.microsoft.com/dotnet/api/system.text.regularexpressions.regex)<br>
