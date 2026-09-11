@@ -36,12 +36,6 @@ capabilities. 😉
 - Upstream `Cache-Control` / `Expires` headers can optionally bound or skip storage.
 - Expired entries can optionally be served when a refresh fails (stale-if-error / offline fallback).
 
-## Some ideas
-
-- Generated `HttpClient` wrappers that attach per-request cache options to every verb
-  (similar to [`MemoryCacheEntryOptions`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.memory.memorycacheentryoptions))
-  would make request-specific TTLs even more convenient. A great task for Source Generators!
-
 ## How to use
 
 Register one or
@@ -103,21 +97,31 @@ When enabled:
 
 ### Per-request cache options
 
-Attach a `LiteDbCacheEntryOptions` instance to an `HttpRequestMessage` to override the named client's defaults for that
-call only:
+Attach a `LiteDbCacheEntryOptions` instance to override the named client's defaults for that call only. Convenience
+overloads exist for GET, HEAD, DELETE, POST, PUT, and PATCH (the verbs the cache engine currently keys), including the
+common [`System.Net.Http.Json`](https://learn.microsoft.com/en-us/dotnet/api/system.net.http.json.httpclientjsonextensions)
+helpers:
 
 ```csharp
-HttpRequestMessage request = new(HttpMethod.Get, "/");
-request.SetLiteDbCacheEntryOptions(new LiteDbCacheEntryOptions
+LiteDbCacheEntryOptions cache = new()
 {
     HonorCacheControl = true,
     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2)
-});
+};
 
-HttpResponseMessage result = await client.SendAsync(request, ct);
+HttpResponseMessage result = await client.GetAsync("/", cache, ct);
+
+IpResponse? ip = await client.GetFromJsonAsync<IpResponse>("/", cache, ct);
 ```
 
-Convenience methods such as `GetAsync` construct the request internally, so per-request options require `SendAsync`.
+You can still attach options to an existing `HttpRequestMessage` when you need custom methods, headers, or completion
+behavior:
+
+```csharp
+HttpRequestMessage request = new(HttpMethod.Get, "/");
+request.Headers.Accept.Add(new("application/json"));
+HttpResponseMessage result = await client.SendAsync(request, cache, ct);
+```
 
 ### Serve stale content when refresh fails
 
