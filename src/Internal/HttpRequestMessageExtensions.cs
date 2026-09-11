@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -26,31 +25,49 @@ internal static class HttpRequestMessageExtensions
             throw new InvalidOperationException("Request URI can not be null");
         }
 
-        using SHA256 alg = SHA256.Create();
+        using IncrementalHash hasher = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+        byte[] separator = { 0 };
+
+        hasher.AppendData(Encoding.UTF8.GetBytes(request.Method.Method));
+        hasher.AppendData(separator);
+        hasher.AppendData(Encoding.UTF8.GetBytes(request.RequestUri.ToString()));
 
         if (request.Method == HttpMethod.Get ||
             request.Method == HttpMethod.Head ||
             request.Method == HttpMethod.Delete)
         {
-            // turn full request URI into cache key
-            byte[] hash = alg.ComputeHash(Encoding.UTF8.GetBytes(request.RequestUri.ToString()));
-
-            return hash.ToHexString();
+            return hasher.GetHashAndReset().ToHexString();
         }
 
         if (request.Method == HttpMethod.Post ||
             request.Method == HttpMethod.Patch ||
             request.Method == HttpMethod.Put)
         {
-            byte[] uriBytes = Encoding.UTF8.GetBytes(request.RequestUri.ToString());
-            byte[] contentBytes = await request.Content!.ReadAsByteArrayAsync(ct);
+            byte[] contentBytes;
 
-            request.Content = new ByteArrayContent(contentBytes);
+            if (request.Content is null)
+            {
+                contentBytes = Array.Empty<byte>();
+            }
+            else
+            {
+                HttpContent originalContent = request.Content;
+                contentBytes = await originalContent.ReadAsByteArrayAsync(ct);
+                ByteArrayContent buffered = new(contentBytes);
 
-            // use request URI and payload to calculate cache key
-            byte[] hash = alg.ComputeHash(uriBytes.Concat(contentBytes).ToArray());
+                foreach (KeyValuePair<string, IEnumerable<string>> header in originalContent.Headers)
+                {
+                    buffered.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                }
 
-            return hash.ToHexString();
+                originalContent.Dispose();
+                request.Content = buffered;
+            }
+
+            hasher.AppendData(separator);
+            hasher.AppendData(contentBytes);
+
+            return hasher.GetHashAndReset().ToHexString();
         }
 
         throw new NotImplementedException($"Method {request.Method} not implemented");

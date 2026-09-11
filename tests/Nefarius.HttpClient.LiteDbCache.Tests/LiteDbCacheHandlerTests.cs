@@ -5,6 +5,8 @@ using LiteDB;
 
 using Xunit;
 
+using Nefarius.HttpClient.LiteDbCache;
+
 using Nefarius.HttpClient.LiteDbCache.Internal;
 using Nefarius.HttpClient.LiteDbCache.Options;
 
@@ -433,6 +435,72 @@ public class LiteDbCacheHandlerTests
         Assert.Equal(2, host.Stub.CallCount);
         Assert.True(second.IsStale());
         Assert.Equal("fresh", await second.Content.ReadAsStringAsync());
+    }
+
+    [Fact]
+    public async Task ConvenienceGetAsync_PerRequestTtl_OverridesClientDefaults()
+    {
+        await using CacheTestHost host = CacheTestHost.Create(options =>
+            options.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10));
+
+        LiteDbCacheEntryOptions expired = new()
+        {
+            AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(-1)
+        };
+
+        await host.Client.GetAsync("/resource", expired);
+        HttpResponseMessage second = await host.Client.GetAsync("/resource", expired);
+
+        Assert.Equal(2, host.Stub.CallCount);
+        Assert.False(second.IsCached());
+    }
+
+    [Fact]
+    public async Task GetAndDelete_SameUri_DoNotShareCacheEntries()
+    {
+        await using CacheTestHost host = CacheTestHost.Create(options =>
+            options.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10));
+
+        await host.Client.GetAsync("/same");
+        HttpResponseMessage deleted = await host.Client.DeleteAsync("/same");
+
+        Assert.Equal(2, host.Stub.CallCount);
+        Assert.False(deleted.IsCached());
+    }
+
+    [Fact]
+    public async Task PostAndPut_SameUriAndBody_DoNotShareCacheEntries()
+    {
+        await using CacheTestHost host = CacheTestHost.Create(options =>
+            options.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10));
+
+        await host.Client.PostAsync("/same", new StringContent("body"));
+        HttpResponseMessage put = await host.Client.PutAsync("/same", new StringContent("body"));
+
+        Assert.Equal(2, host.Stub.CallCount);
+        Assert.False(put.IsCached());
+    }
+
+    [Fact]
+    public async Task PostAsJsonAsync_PreservesJsonContentTypeThroughCacheKeyBuffering()
+    {
+        HttpRequestMessage? captured = null;
+        await using CacheTestHost host = CacheTestHost.Create(options =>
+                options.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
+            (request, _) =>
+            {
+                captured = request;
+                return StubHttpHandler.Ok("""{"name":"ok"}""", "application/json");
+            });
+
+        await host.Client.PostAsJsonAsync("/json", new HttpClientJsonExtensionsTests.JsonDto { Name = "payload" },
+            new LiteDbCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2)
+            });
+
+        Assert.NotNull(captured);
+        Assert.Equal("application/json", captured!.Content!.Headers.ContentType?.MediaType);
     }
 
     [Fact]
