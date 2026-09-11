@@ -435,6 +435,55 @@ public class LiteDbCacheHandlerTests
         Assert.Equal("fresh", await second.Content.ReadAsStringAsync());
     }
 
+    [Fact]
+    public async Task CacheResponseContentDisabled_DoesNotRestoreContentHeadersOnHit()
+    {
+        await using CacheTestHost host = CacheTestHost.Create(options =>
+        {
+            options.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
+            options.CacheResponseContent = false;
+        }, (_, _) => StubHttpHandler.Ok("payload", "application/json"));
+
+        await host.Client.GetAsync("/resource");
+        HttpResponseMessage second = await host.Client.GetAsync("/resource");
+
+        Assert.True(second.IsCached());
+        Assert.Null(second.Content.Headers.ContentType);
+        Assert.True(string.IsNullOrEmpty(await second.Content.ReadAsStringAsync()));
+    }
+
+    [Fact]
+    public async Task HonorCacheControl_NoStore_DeletesStaleCandidate()
+    {
+        await using CacheTestHost host = CacheTestHost.Create(options =>
+        {
+            options.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
+            options.HonorCacheControl = true;
+            options.ServeStaleOnError = true;
+        }, (_, n) => n switch
+        {
+            1 => StubHttpHandler.Ok("fresh"),
+            2 => StubHttpHandler.Ok("live", configure: response =>
+                response.Headers.CacheControl = new CacheControlHeaderValue { NoStore = true }),
+            _ => new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+            {
+                Content = new StringContent("down")
+            }
+        });
+
+        await host.Client.GetAsync("/resource");
+        AgeEntry(host);
+        HttpResponseMessage refreshed = await host.Client.GetAsync("/resource");
+        HttpResponseMessage third = await host.Client.GetAsync("/resource");
+
+        Assert.Equal(3, host.Stub.CallCount);
+        Assert.False(refreshed.IsCached());
+        Assert.Equal("live", await refreshed.Content.ReadAsStringAsync());
+        Assert.False(third.IsCached());
+        Assert.False(third.IsStale());
+        Assert.Equal(HttpStatusCode.ServiceUnavailable, third.StatusCode);
+    }
+
     private static void AgeEntry(CacheTestHost host)
     {
         LiteDatabase db = host.Databases.GetDatabase(CacheTestHost.ClientName)

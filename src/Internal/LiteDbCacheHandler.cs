@@ -141,6 +141,7 @@ internal sealed class LiteDbCacheHandler(
             if (staleCandidate is not null && entryOptions.ServeStaleOnError)
             {
                 logger.LogDebug("Remote request didn't succeed, serving stale {CacheEntry}", staleCandidate);
+                response.Dispose();
                 return CreateCachedResponse(request, staleCandidate, fs, true);
             }
 
@@ -159,6 +160,11 @@ internal sealed class LiteDbCacheHandler(
             if (!decision.CanCache)
             {
                 logger.LogDebug("Upstream cache directives forbid storing {@Request}", request);
+                if (staleCandidate is not null)
+                {
+                    DeleteCacheEntry(staleCandidate, fs, col);
+                }
+
                 return response;
             }
 
@@ -177,8 +183,7 @@ internal sealed class LiteDbCacheHandler(
             SchemaVersion = CachedHttpResponseMessage.CurrentSchemaVersion,
             StatusCode = response.StatusCode,
             ContentType = response.Content.Headers.ContentType?.ToString(),
-            UpstreamExpiresAt = upstreamExpiresAt,
-            ContentHeaders = CloneHeaders(response.Content.Headers)
+            UpstreamExpiresAt = upstreamExpiresAt
         };
 
         // clone headers only if desired
@@ -190,6 +195,7 @@ internal sealed class LiteDbCacheHandler(
         // omit content, if configured
         if (entryOptions.CacheResponseContent)
         {
+            cacheEntry.ContentHeaders = CloneHeaders(response.Content.Headers);
             responseMs.Position = 0;
             LiteFileInfo<string> file = fs.Upload(requestKey, ContentFileName, responseMs);
             cacheEntry.ContentFileId = file.Id;
