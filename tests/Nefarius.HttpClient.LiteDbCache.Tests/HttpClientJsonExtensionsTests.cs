@@ -1,4 +1,6 @@
 using System.Net;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 
@@ -49,6 +51,26 @@ public class HttpClientJsonExtensionsTests
         JsonDto? dto = await client.GetFromJsonAsync("/resource", CacheOptions, JsonDtoTypeInfo());
 
         Assert.Equal("typed", dto?.Name);
+    }
+
+    [Fact]
+    public async Task GetFromJsonAsync_JsonTypeInfo_TranscodesNonUtf8Response()
+    {
+        Encoding encoding = Encoding.Latin1;
+        byte[] body = encoding.GetBytes("""{"name":"café"}""");
+        using NetHttpClient client = CreateClient(_ =>
+        {
+            ByteArrayContent content = new(body);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json")
+            {
+                CharSet = encoding.WebName
+            };
+            return new HttpResponseMessage(HttpStatusCode.OK) { Content = content };
+        });
+
+        JsonDto? dto = await client.GetFromJsonAsync("/resource", CacheOptions, JsonDtoTypeInfo());
+
+        Assert.Equal("café", dto?.Name);
     }
 
     [Fact]
@@ -170,7 +192,12 @@ public class HttpClientJsonExtensionsTests
 
     private static JsonTypeInfo<JsonDto> JsonDtoTypeInfo()
     {
-        return (JsonTypeInfo<JsonDto>)WebJson.GetTypeInfo(typeof(JsonDto));
+        JsonSerializerOptions options = new(JsonSerializerDefaults.Web)
+        {
+            TypeInfoResolver = new DefaultJsonTypeInfoResolver()
+        };
+
+        return (JsonTypeInfo<JsonDto>)options.GetTypeInfo(typeof(JsonDto));
     }
 
     private static NetHttpClient CreateClient(Func<HttpRequestMessage, HttpResponseMessage>? responder = null)

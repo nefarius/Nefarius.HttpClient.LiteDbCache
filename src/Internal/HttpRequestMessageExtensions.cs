@@ -60,7 +60,6 @@ internal static class HttpRequestMessageExtensions
                     buffered.Headers.TryAddWithoutValidation(header.Key, header.Value);
                 }
 
-                originalContent.Dispose();
                 request.Content = buffered;
             }
 

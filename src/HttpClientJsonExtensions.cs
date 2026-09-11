@@ -1,7 +1,6 @@
 #nullable enable
 
 using System;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -420,9 +419,7 @@ public static class HttpClientJsonExtensions
     {
         using HttpResponseMessage response = await responseTask;
         response.EnsureSuccessStatusCode();
-
-        await using Stream stream = await response.Content.ReadAsStreamAsync(cancellationToken);
-        return await JsonSerializer.DeserializeAsync(stream, jsonTypeInfo, cancellationToken);
+        return await response.Content.ReadFromJsonAsync(jsonTypeInfo, cancellationToken);
     }
 
     private static ByteArrayContent CreateJsonContent<TValue>(TValue value, JsonTypeInfo<TValue> jsonTypeInfo)

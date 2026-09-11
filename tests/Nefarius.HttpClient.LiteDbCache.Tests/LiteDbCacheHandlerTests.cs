@@ -504,6 +504,21 @@ public class LiteDbCacheHandlerTests
     }
 
     [Fact]
+    public async Task SameHttpContent_CanBeReusedAcrossRequests()
+    {
+        await using CacheTestHost host = CacheTestHost.Create(options =>
+            options.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10));
+
+        StringContent content = new("shared-body");
+        HttpResponseMessage first = await host.Client.PostAsync("/one", content);
+        HttpResponseMessage second = await host.Client.PostAsync("/two", content);
+
+        Assert.Equal(2, host.Stub.CallCount);
+        Assert.True(first.IsSuccessStatusCode);
+        Assert.True(second.IsSuccessStatusCode);
+    }
+
+    [Fact]
     public async Task CacheResponseContentDisabled_DoesNotRestoreContentHeadersOnHit()
     {
         await using CacheTestHost host = CacheTestHost.Create(options =>
