@@ -16,7 +16,11 @@ public sealed class LiteDbCacheEntryOptions
 {
     private TimeSpan? _absoluteExpirationRelativeToNow;
     private TimeSpan? _slidingExpiration;
-    internal LiteDbCacheEntryOptions() { }
+
+    /// <summary>
+    ///     Initializes a new instance of <see cref="LiteDbCacheEntryOptions" />.
+    /// </summary>
+    public LiteDbCacheEntryOptions() { }
 
     /// <summary>
     ///     Gets or sets an absolute expiration date for the cache entry.
@@ -91,4 +95,25 @@ public sealed class LiteDbCacheEntryOptions
     /// </summary>
     /// <remarks>Enabled by default.</remarks>
     public bool CacheResponseContent { internal get; set; } = true;
+
+    /// <summary>
+    ///     Gets or sets whether response <c>Cache-Control</c> and <c>Expires</c> headers should influence cache storage and
+    ///     lifetime.
+    /// </summary>
+    /// <remarks>
+    ///     Disabled by default. When enabled, <c>no-store</c> and <c>no-cache</c> prevent storage,
+    ///     <c>max-age</c> (accounting for <c>Date</c>/<c>Age</c>) bounds entry lifetime, and <c>Expires</c> is used only when
+    ///     <c>max-age</c> is absent. Local expiration options still apply; the earliest expiry wins.
+    /// </remarks>
+    public bool HonorCacheControl { internal get; set; } = false;
+
+    /// <summary>
+    ///     Gets or sets whether an expired cache entry should be returned when refreshing the remote resource fails.
+    /// </summary>
+    /// <remarks>
+    ///     Disabled by default. When enabled, expired entries are kept until a successful refresh. A refresh failure is a
+    ///     transport error (timeout, connection failure) or a non-success status code when <see cref="CacheErrors" /> is
+    ///     <see langword="false" />. Caller cancellation is not treated as a refresh failure.
+    /// </remarks>
+    public bool ServeStaleOnError { internal get; set; } = false;
 }

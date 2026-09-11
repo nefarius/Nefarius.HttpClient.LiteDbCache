@@ -23,3 +23,6 @@ jobs:
 
       - name: Build
         run: dotnet build -c Release
+
+      - name: Test
+        run: dotnet test -c Release --no-build --verbosity normal

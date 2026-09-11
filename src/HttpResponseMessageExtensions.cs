@@ -35,4 +35,15 @@ public static class HttpResponseMessageExtensions
             ? null
             : new ObjectId(cacheId.Single());
     }
+
+    /// <summary>
+    ///     Checks whether a <see cref="HttpResponseMessage" /> was served from an expired cache entry after a failed refresh.
+    /// </summary>
+    /// <param name="message">The <see cref="HttpResponseMessage" /> to check.</param>
+    /// <returns>True if a stale cached entry was returned, false otherwise.</returns>
+    public static bool IsStale(this HttpResponseMessage message)
+    {
+        return message.Headers.TryGetValues(LiteDbCacheHeaders.CacheStale, out IEnumerable<string>? values) &&
+               values.Any(v => bool.TryParse(v, out bool isSet) && isSet);
+    }
 }

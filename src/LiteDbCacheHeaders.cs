@@ -24,4 +24,9 @@ public static class LiteDbCacheHeaders
     ///     Gets the entry creation timestamp.
     /// </summary>
     public const string CacheCreatedAt = "X-LiteDb-Cache-Created-At";
+
+    /// <summary>
+    ///     Gets whether the entry was served after it had expired because the refresh request failed.
+    /// </summary>
+    public const string CacheStale = "X-LiteDb-Cache-Stale";
 }

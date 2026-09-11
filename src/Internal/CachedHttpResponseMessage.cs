@@ -21,7 +21,7 @@ internal sealed class CachedHttpResponseMessage
     ///     The current schema version. Increment when <see cref="CachedHttpResponseMessage" /> changes.
     /// </summary>
     /// <remarks>Increment whenever <see cref="CachedHttpResponseMessage"/> changes in an API-breaking fashion.</remarks>
-    public const int CurrentSchemaVersion = 2;
+    public const int CurrentSchemaVersion = 3;
 
     /// <summary>
     ///     Database primary key.
@@ -44,6 +44,16 @@ internal sealed class CachedHttpResponseMessage
     ///     Response HTTP headers.
     /// </summary>
     public Dictionary<string, List<string>> Headers { get; set; } = new();
+
+    /// <summary>
+    ///     Response content HTTP headers.
+    /// </summary>
+    public Dictionary<string, List<string>> ContentHeaders { get; set; } = new();
+
+    /// <summary>
+    ///     Absolute expiry derived from upstream <c>Cache-Control</c> / <c>Expires</c>, if any.
+    /// </summary>
+    public DateTimeOffset? UpstreamExpiresAt { get; set; }
 
     /// <summary>
     ///     Response status code.

@@ -38,6 +38,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <InternalsVisibleTo Include="Nefarius.HttpClient.LiteDbCache.Tests"/>
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="LiteDB" Version="5.0.21"/>
         <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0"/>
         <PackageReference Include="MinVer" Version="8.0.0">
