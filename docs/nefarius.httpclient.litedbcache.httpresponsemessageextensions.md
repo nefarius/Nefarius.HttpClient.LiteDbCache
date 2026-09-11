@@ -46,3 +46,20 @@ The [HttpResponseMessage](https://learn.microsoft.com/dotnet/api/system.net.http
 #### Returns
 
 True if pulled from cache, false otherwise.
+
+### <a id="methods-isstale"/>**IsStale(HttpResponseMessage)**
+
+Checks whether a [HttpResponseMessage](https://learn.microsoft.com/dotnet/api/system.net.http.httpresponsemessage) was served from an expired cache entry after a failed refresh.
+
+```csharp
+public static bool IsStale(HttpResponseMessage message)
+```
+
+#### Parameters
+
+`message` [HttpResponseMessage](https://learn.microsoft.com/dotnet/api/system.net.http.httpresponsemessage)<br>
+The [HttpResponseMessage](https://learn.microsoft.com/dotnet/api/system.net.http.httpresponsemessage) to check.
+
+#### Returns
+
+True if a stale cached entry was returned, false otherwise.

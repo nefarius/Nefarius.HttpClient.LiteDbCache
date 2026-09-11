@@ -43,3 +43,11 @@ Gets the instance name (HTTP/Database instance) the entry was pulled out of.
 ```csharp
 public static string CacheInstance;
 ```
+
+### <a id="fields-cachestale"/>**CacheStale**
+
+Gets whether the entry was served after it had expired because the refresh request failed.
+
+```csharp
+public static string CacheStale;
+```

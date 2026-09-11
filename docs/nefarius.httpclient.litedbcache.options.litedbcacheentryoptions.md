@@ -97,6 +97,43 @@ public List<String> ExcludedContentTypes { get; internal set; }
 
 [List](https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1)<[String](https://learn.microsoft.com/dotnet/api/system.string)><br>
 
+### <a id="properties-honorcachecontrol"/>**HonorCacheControl**
+
+Gets or sets whether response `Cache-Control` and `Expires` headers should influence cache storage and
+ lifetime.
+
+```csharp
+public bool HonorCacheControl { internal get; set; }
+```
+
+#### Property Value
+
+[Boolean](https://learn.microsoft.com/dotnet/api/system.boolean)<br>
+
+**Remarks:**
+
+Disabled by default. When enabled, `no-store` and `no-cache` prevent storage,
+ `max-age` (accounting for `Date`/`Age`) bounds entry lifetime, and `Expires` is used only when
+ `max-age` is absent. Local expiration options still apply; the earliest expiry wins.
+
+### <a id="properties-servestaleonerror"/>**ServeStaleOnError**
+
+Gets or sets whether an expired cache entry should be returned when refreshing the remote resource fails.
+
+```csharp
+public bool ServeStaleOnError { internal get; set; }
+```
+
+#### Property Value
+
+[Boolean](https://learn.microsoft.com/dotnet/api/system.boolean)<br>
+
+**Remarks:**
+
+Disabled by default. When enabled, expired entries are kept until a successful refresh. A refresh failure is a
+ transport error (timeout, connection failure) or a non-success status code when [LiteDbCacheEntryOptions.CacheErrors](./nefarius.httpclient.litedbcache.options.litedbcacheentryoptions.md#cacheerrors) is
+ `false`. Caller cancellation is not treated as a refresh failure.
+
 ### <a id="properties-slidingexpiration"/>**SlidingExpiration**
 
 Gets or sets how long a cache entry can be inactive (e.g. not accessed) before it will be removed.
@@ -121,3 +158,13 @@ public Regex UriExclusionRegex { internal get; set; }
 #### Property Value
 
 [Regex](https://learn.microsoft.com/dotnet/api/system.text.regularexpressions.regex)<br>
+
+## Constructors
+
+### <a id="constructors-.ctor"/>**LiteDbCacheEntryOptions()**
+
+Initializes a new instance of [LiteDbCacheEntryOptions](./nefarius.httpclient.litedbcache.options.litedbcacheentryoptions.md).
+
+```csharp
+public LiteDbCacheEntryOptions()
+```
