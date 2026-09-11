@@ -32,19 +32,15 @@ capabilities. 😉
 
 - Each named HTTP client gets its own backing cache database instance which is kept exclusively open by default
   throughout application lifetime for performance benefits.
-- Cached entries expiration (and exclusion) can be configured globally per named instance.
+- Cached entries expiration (and exclusion) can be configured globally per named instance or overridden per request.
+- Upstream `Cache-Control` / `Expires` headers can optionally bound or skip storage.
+- Expired entries can optionally be served when a refresh fails (stale-if-error / offline fallback).
 
 ## Some ideas
 
-- Per-request cache entry expiration options
-  (like [`MemoryCacheEntryOptions`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.memory.memorycacheentryoptions)
-  and similar) are technically possible; however due to how the `HttpClient` class is structured would require writing a
-  ton of wrapper methods that supply these options to each `HttpRequestMessage` (which can not be conveniently
-  overwritten); a task I am currently not fond of since it's a low priority anyway.
-    - A great task for Source Generators!
-- The upstream `Cache-Control` header is currently completely ignored; it could be taken into consideration, if the user
-  configured it to be honored.
-- Add some unit tests... maybe. Someday. 😅
+- Generated `HttpClient` wrappers that attach per-request cache options to every verb
+  (similar to [`MemoryCacheEntryOptions`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.memory.memorycacheentryoptions))
+  would make request-specific TTLs even more convenient. A great task for Source Generators!
 
 ## How to use
 
@@ -80,6 +76,61 @@ string? publicIP = await result.Content.ReadAsStringAsync(ct);
 
 If a cached entry exists, the response (headers, body content etc.) will be pulled and returned from the local database
 and no remote web request will be issued until the cache entry expires.
+
+### Honour upstream cache headers
+
+Set `HonorCacheControl` to let the remote `Cache-Control` and `Expires` headers influence storage. This stays **off** by
+default so existing clients keep their configured TTLs.
+
+```csharp
+}).AddLiteDbCache(options =>
+{
+    options.ConnectionString = @"C:\Temp\ifconfig.db";
+    options.CollectionName = "ifconfig-response-cache";
+    options.EntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
+    options.EntryOptions.HonorCacheControl = true;
+});
+```
+
+When enabled:
+
+- `Cache-Control: no-store` and `no-cache` skip caching entirely (`no-cache` is treated as a bypass, not as HTTP
+  revalidation with `ETag` / `Last-Modified`).
+- `max-age` (minus `Age` / apparent age from `Date`) is an upper bound on how long the entry may be reused.
+- `Expires` is used only when `max-age` is absent.
+- Responses that are already stale on arrival are not stored.
+- Local expiration options still apply; the earliest expiry wins.
+
+### Per-request cache options
+
+Attach a `LiteDbCacheEntryOptions` instance to an `HttpRequestMessage` to override the named client's defaults for that
+call only:
+
+```csharp
+HttpRequestMessage request = new(HttpMethod.Get, "/");
+request.SetLiteDbCacheEntryOptions(new LiteDbCacheEntryOptions
+{
+    HonorCacheControl = true,
+    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2)
+});
+
+HttpResponseMessage result = await client.SendAsync(request, ct);
+```
+
+Convenience methods such as `GetAsync` construct the request internally, so per-request options require `SendAsync`.
+
+### Serve stale content when refresh fails
+
+By default an expired entry is discarded before the remote call. Set `ServeStaleOnError` to keep it and return that
+snapshot when the refresh fails (transport error, timeout, or a non-success status). Successful refreshes replace the
+entry as usual. Caller cancellation is not treated as a failure.
+
+```csharp
+options.EntryOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
+options.EntryOptions.ServeStaleOnError = true;
+```
+
+Stale fallbacks still report `IsCached()` and also `IsStale()`, and include the `X-LiteDb-Cache-Stale` header.
 
 ## Advanced usage
 

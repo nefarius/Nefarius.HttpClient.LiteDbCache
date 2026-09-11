@@ -11,4 +11,10 @@ public static class LiteDbCacheHttpRequestOptions
     ///     Cache-entry-specific <see cref="LiteDbCacheEntryOptions"/>.
     /// </summary>
     public const string EntryOptions = nameof(LiteDbCacheEntryOptions);
+
+    /// <summary>
+    ///     Strongly typed <see cref="HttpRequestOptionsKey{TValue}"/> for
+    ///     <see cref="LiteDbCacheEntryOptions"/> stored on <see cref="HttpRequestMessage.Options"/>.
+    /// </summary>
+    public static HttpRequestOptionsKey<LiteDbCacheEntryOptions> EntryOptionsKey { get; } = new(EntryOptions);
 }
