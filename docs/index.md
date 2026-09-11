@@ -4,6 +4,10 @@
 
 - [HttpClientBuilderExtensions](./nefarius.httpclient.litedbcache.httpclientbuilderextensions.md)
 
+- [HttpClientExtensions](./nefarius.httpclient.litedbcache.httpclientextensions.md)
+
+- [HttpClientJsonExtensions](./nefarius.httpclient.litedbcache.httpclientjsonextensions.md)
+
 - [HttpRequestMessageExtensions](./nefarius.httpclient.litedbcache.httprequestmessageextensions.md)
 
 - [HttpResponseMessageExtensions](./nefarius.httpclient.litedbcache.httpresponsemessageextensions.md)
